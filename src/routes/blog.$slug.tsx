@@ -44,7 +44,7 @@ export const Route = createFileRoute("/blog/$slug")({
 });
 
 function PostPage() {
-  const { post } = Route.useLoaderData();
+  const { post } = Route.useLoaderData() as { post: BlogPost };
   const related = listPosts({ category: post.category }).filter((p) => p.slug !== post.slug).slice(0, 3);
   const paragraphs = post.content.split(/\n\n+/);
 

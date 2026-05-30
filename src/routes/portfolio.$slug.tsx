@@ -35,7 +35,7 @@ export const Route = createFileRoute("/portfolio/$slug")({
 });
 
 function ProjectPage() {
-  const { project } = Route.useLoaderData();
+  const { project } = Route.useLoaderData() as { project: Project };
   const related = project.relatedBlogSlug ? getPost(project.relatedBlogSlug) : undefined;
   const others = projects.filter((p) => p.slug !== project.slug).slice(0, 2);
 
