@@ -1,0 +1,36 @@
+import type { ReactNode } from "react";
+
+export function Section({
+  id,
+  eyebrow,
+  title,
+  description,
+  children,
+  className = "",
+}: {
+  id?: string;
+  eyebrow?: string;
+  title?: ReactNode;
+  description?: ReactNode;
+  children: ReactNode;
+  className?: string;
+}) {
+  return (
+    <section id={id} className={`mx-auto max-w-7xl px-6 py-24 ${className}`}>
+      {(eyebrow || title || description) && (
+        <div className="max-w-3xl mb-12">
+          {eyebrow && <span className="chip">{eyebrow}</span>}
+          {title && (
+            <h2 className="mt-4 text-3xl md:text-4xl font-semibold tracking-tight text-foreground">
+              {title}
+            </h2>
+          )}
+          {description && (
+            <p className="mt-4 text-base md:text-lg text-muted-foreground">{description}</p>
+          )}
+        </div>
+      )}
+      {children}
+    </section>
+  );
+}
