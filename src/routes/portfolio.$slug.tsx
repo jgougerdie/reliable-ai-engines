@@ -4,8 +4,9 @@ import { getProject, projects } from "@/data/projects";
 import { getPost } from "@/data/blog";
 import { ArrowLeft, ArrowRight, CheckCircle2 } from "lucide-react";
 
+import type { Project } from "@/data/projects";
 export const Route = createFileRoute("/portfolio/$slug")({
-  loader: ({ params }) => {
+  loader: ({ params }): { project: Project } => {
     const project = getProject(params.slug);
     if (!project) throw notFound();
     return { project };

@@ -3,8 +3,9 @@ import { Section } from "@/components/site/Section";
 import { getPost, listPosts } from "@/data/blog";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 
+import type { BlogPost } from "@/data/blog";
 export const Route = createFileRoute("/blog/$slug")({
-  loader: ({ params }) => {
+  loader: ({ params }): { post: BlogPost } => {
     const post = getPost(params.slug);
     if (!post) throw notFound();
     return { post };
