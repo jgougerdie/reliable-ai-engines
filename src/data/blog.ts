@@ -127,7 +127,171 @@ Freshness is the last killer. Incremental sync, deletion handling, and embedding
     tags: ["LangGraph", "Tutorial"],
     date: "2025-01-08",
     readingMinutes: 12,
-    content: `In this tutorial we build a self-correcting LangGraph agent. The producer node generates a candidate; the critic node validates it against a schema and rubric; the controller decides whether to accept, retry, or escalate.`,
+    content: `In this tutorial we build a self-correcting LangGraph agent. The producer node generates a candidate; the critic node validates it against a schema and rubric; the controller decides whether to accept, retry, or escalate. By the end you will have a working graph you can adapt to extraction, code generation, or any task where "wrong but confident" is the failure mode you need to eliminate.
+
+## What we're building
+
+A three-node graph:
+
+- **Producer** — calls an LLM to generate a structured candidate answer.
+- **Critic** — validates the candidate against a Pydantic schema and a rubric, returning either \`accept\` or a list of issues.
+- **Controller** — routes the next step: accept and finish, retry with the critique appended to the prompt, or escalate to a stronger model after the retry budget is exhausted.
+
+The state object is the single source of truth. Every node is a pure function of state.
+
+## 1. Install and set up
+
+\`\`\`bash
+pip install langgraph langchain-openai pydantic
+export OPENAI_API_KEY=sk-...
+\`\`\`
+
+## 2. Define the state
+
+State is explicit, typed, and replayable. Avoid hidden globals.
+
+\`\`\`python
+from typing import TypedDict, Optional, List
+from pydantic import BaseModel, Field
+
+class Invoice(BaseModel):
+    vendor: str = Field(min_length=1)
+    total_cents: int = Field(ge=0)
+    currency: str = Field(pattern=r"^[A-Z]{3}$")
+    line_items: list[str]
+
+class GraphState(TypedDict):
+    raw_text: str
+    candidate: Optional[Invoice]
+    issues: List[str]
+    attempts: int
+    final: Optional[Invoice]
+    escalated: bool
+\`\`\`
+
+## 3. Producer node
+
+Use structured outputs so the model returns parseable JSON. Append prior critique on retries — this is what makes the loop self-correcting.
+
+\`\`\`python
+from langchain_openai import ChatOpenAI
+
+producer_llm = ChatOpenAI(model="gpt-4o-mini", temperature=0)
+
+def producer(state: GraphState) -> GraphState:
+    critique = ""
+    if state["issues"]:
+        critique = "\\n\\nPrevious attempt had these issues — fix them:\\n- " + "\\n- ".join(state["issues"])
+    prompt = f"Extract an invoice from:\\n\\n{state['raw_text']}{critique}"
+    candidate = producer_llm.with_structured_output(Invoice).invoke(prompt)
+    return {**state, "candidate": candidate, "attempts": state["attempts"] + 1}
+\`\`\`
+
+## 4. Critic node
+
+Cheaper than the producer. Returns concrete, actionable issues — not vibes.
+
+\`\`\`python
+critic_llm = ChatOpenAI(model="gpt-4o-mini", temperature=0)
+
+class Critique(BaseModel):
+    accept: bool
+    issues: list[str]
+
+def critic(state: GraphState) -> GraphState:
+    cand = state["candidate"]
+    if cand is None:
+        return {**state, "issues": ["No candidate produced"]}
+    rubric = (
+        "Reject if: vendor looks like a person name, total_cents is missing decimals,"
+        " currency is not ISO-4217, or line_items is empty."
+    )
+    msg = f"Rubric:\\n{rubric}\\n\\nCandidate:\\n{cand.model_dump_json()}"
+    result = critic_llm.with_structured_output(Critique).invoke(msg)
+    return {**state, "issues": [] if result.accept else result.issues}
+\`\`\`
+
+## 5. Controller (the routing function)
+
+Control flow is code, not an LLM decision. This is the single most important rule for production agents.
+
+\`\`\`python
+MAX_ATTEMPTS = 2
+
+def route(state: GraphState) -> str:
+    if not state["issues"]:
+        return "accept"
+    if state["attempts"] >= MAX_ATTEMPTS:
+        return "escalate"
+    return "retry"
+
+def accept(state: GraphState) -> GraphState:
+    return {**state, "final": state["candidate"]}
+
+escalation_llm = ChatOpenAI(model="gpt-4o", temperature=0)
+
+def escalate(state: GraphState) -> GraphState:
+    cand = escalation_llm.with_structured_output(Invoice).invoke(
+        f"Extract an invoice. Previous attempts failed: {state['issues']}\\n\\n{state['raw_text']}"
+    )
+    return {**state, "final": cand, "escalated": True}
+\`\`\`
+
+## 6. Wire the graph
+
+\`\`\`python
+from langgraph.graph import StateGraph, END
+
+g = StateGraph(GraphState)
+g.add_node("producer", producer)
+g.add_node("critic", critic)
+g.add_node("accept", accept)
+g.add_node("escalate", escalate)
+
+g.set_entry_point("producer")
+g.add_edge("producer", "critic")
+g.add_conditional_edges("critic", route, {
+    "accept": "accept",
+    "retry": "producer",
+    "escalate": "escalate",
+})
+g.add_edge("accept", END)
+g.add_edge("escalate", END)
+
+app = g.compile()
+\`\`\`
+
+## 7. Run it
+
+\`\`\`python
+result = app.invoke({
+    "raw_text": "ACME Logistics LLC — Invoice #4421 — Total: $1,204.50 USD — Items: pallet wrap, freight",
+    "candidate": None,
+    "issues": [],
+    "attempts": 0,
+    "final": None,
+    "escalated": False,
+})
+print(result["final"], "escalated:", result["escalated"], "attempts:", result["attempts"])
+\`\`\`
+
+## What you just built
+
+Four properties that separate this from a demo:
+
+1. **Replayable** — the entire state object is serializable. Persist it and you can replay any failed run.
+2. **Bounded** — the retry budget caps both cost and latency. No infinite loops.
+3. **Self-correcting** — critique flows back into the producer prompt instead of being thrown away.
+4. **Cost-aware** — small model does the producer/critic work; the frontier model is reserved for escalation.
+
+## Where to take it next
+
+- Add a **golden eval set** and run the graph against it on every change. Without eval you cannot tell whether a prompt edit helped.
+- Emit traces to LangSmith or OpenTelemetry — every node transition, every token count, every retry reason.
+- Replace the rubric-based critic with a **deterministic validator** wherever possible (regex, schema, business rules). LLM critics are a fallback, not a default.
+- Swap the producer for a tool-calling agent when extraction isn't enough and the model actually needs to query systems.
+
+The architecture stays the same. That's the point.`,
   },
 ];
 
