@@ -1,3 +1,4 @@
+import type React from "react";
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { Section } from "@/components/site/Section";
 import { getPost, listPosts } from "@/data/blog";
