@@ -66,47 +66,7 @@ function PostPage() {
         </div>
 
         <div className="mt-10 space-y-5 text-[17px] leading-relaxed text-muted-foreground">
-          {paragraphs.map((p, i) => {
-            const trimmed = p.trim();
-            if (trimmed.startsWith("```")) {
-              const inner = trimmed.replace(/^```[a-zA-Z]*\n?/, "").replace(/```$/, "");
-              return (
-                <pre key={i} className="bg-[var(--surface)] border border-border rounded-lg p-4 overflow-x-auto text-[13px] leading-relaxed font-mono text-foreground/90">
-                  <code>{inner}</code>
-                </pre>
-              );
-            }
-            if (trimmed.startsWith("## ")) {
-              return <h2 key={i} className="text-2xl font-semibold tracking-tight text-foreground mt-10">{trimmed.slice(3)}</h2>;
-            }
-            if (trimmed.startsWith("- ")) {
-              const items = trimmed.split(/\n/).map((l) => l.replace(/^-\s+/, ""));
-              return (
-                <ul key={i} className="list-disc pl-6 space-y-2">
-                  {items.map((it, j) => (
-                    <li key={j} dangerouslySetInnerHTML={{ __html: it.replace(/\*\*(.+?)\*\*/g, '<strong class="text-foreground">$1</strong>') }} />
-                  ))}
-                </ul>
-              );
-            }
-            if (/^\d+\.\s/.test(trimmed)) {
-              const items = trimmed.split(/\n/).map((l) => l.replace(/^\d+\.\s+/, ""));
-              return (
-                <ol key={i} className="list-decimal pl-6 space-y-2">
-                  {items.map((it, j) => (
-                    <li key={j} dangerouslySetInnerHTML={{ __html: it.replace(/\*\*(.+?)\*\*/g, '<strong class="text-foreground">$1</strong>') }} />
-                  ))}
-                </ol>
-              );
-            }
-            return (
-              <p
-                key={i}
-                className={i === 0 ? "text-foreground/90 text-lg" : ""}
-                dangerouslySetInnerHTML={{ __html: trimmed.replace(/\*\*(.+?)\*\*/g, '<strong class="text-foreground">$1</strong>') }}
-              />
-            );
-          })}
+          {renderBlocks(post.content)}
         </div>
 
         <div className="mt-10 flex flex-wrap gap-2">
