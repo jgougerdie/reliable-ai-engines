@@ -40,7 +40,7 @@ export const posts: BlogPost[] = [
       "HVAC blueprints and CAD files are geometric systems, not text. Why end-to-end LLM extraction collapses in production, and the deterministic-first architecture that actually holds up.",
     category: "AI Architecture",
     tags: ["CAD", "HVAC", "Extraction", "Architecture"],
-    date: "2025-05-20",
+    date: "2026-06-02",
     readingMinutes: 8,
     featured: true,
     cover: coverEngineering,
