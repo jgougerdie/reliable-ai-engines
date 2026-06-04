@@ -30,7 +30,7 @@ export type BlogPost = {
   content: string; // markdown-ish plain text rendered as paragraphs
 };
 
-import coverEngineering from "@/assets/blog-engineering-extraction.jpg";
+
 import coverDeterministic from "@/assets/blog-deterministic-first.jpg";
 import diagramStages from "@/assets/blog-production-ai-stages.png";
 
