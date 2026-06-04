@@ -31,8 +31,117 @@ export type BlogPost = {
 };
 
 import coverEngineering from "@/assets/blog-engineering-extraction.jpg";
+import coverDeterministic from "@/assets/blog-deterministic-first.jpg";
+import diagramStages from "@/assets/blog-production-ai-stages.png";
 
 export const posts: BlogPost[] = [
+  {
+    slug: "llm-only-fails-engineering-extraction-what-works",
+    title: "Why LLM-Only Approaches Fail in Engineering Document Extraction — And What Works Instead",
+    excerpt:
+      "Building production-grade document intelligence systems requires more than connecting an LLM to a PDF. A deterministic-first architecture for engineering documents.",
+    category: "AI Architecture",
+    tags: ["Production Systems", "Document AI", "Architecture", "Reliability"],
+    date: "2026-06-04",
+    readingMinutes: 8,
+    featured: true,
+    cover: coverDeterministic,
+    content: `Most engineering teams approach document extraction the same way: connect an LLM to a PDF parser, write a prompt, ship a demo. It works on the first ten documents. It fails on the next ten thousand.
+
+The failure is not the model. It is the architecture around it.
+
+> Production document intelligence is not a prompting problem. It is a systems problem.
+
+## The Core Problem: Documents Are Not Text
+
+Engineering documents — HVAC blueprints, electrical schematics, mechanical drawings, CAD exports — are **geometric and relational systems**. They encode meaning through position, scale, layering, and symbolic convention. Flattening them to text or images for an LLM throws that meaning away.
+
+What the model receives is a lossy projection of the real document. What we then ask it to do is reconstruct, by inference, the structure that was deleted before it ever saw the file. That is not extraction. That is guessing.
+
+## Why LLM-Only Pipelines Fail
+
+The failure modes are not random. They are consequences of asking a probabilistic language model to operate on structurally precise engineering data.
+
+:::callout warn|Common Failure Modes
+- Misinterpreted spatial relationships — unrelated ducts connected, walls merged across rooms
+- Loss of scale and coordinate integrity between pages
+- Inconsistent entity classification across visually similar drawings
+- Non-reproducible outputs between runs of the same document
+- OCR ambiguity amplified into structural errors downstream
+- Silent hallucinations on missing components — the model invents what it expects to see
+:::
+
+These are not prompt-engineering bugs. They are inherent to a single-stage pipeline where the LLM is asked to be parser, classifier, validator, and structurer at once.
+
+## Deterministic-First Architecture
+
+The fix is to invert the pipeline. Instead of letting a language model interpret raw geometry, **extract structure deterministically first** and let the model reason over a clean, validated representation.
+
+![Deterministic-first document intelligence pipeline](${diagramStages})
+
+The same principle applies across every production AI system I have built: structure first, models second. Reliability comes from the architecture, not the weights.
+
+## 1. Deterministic Extraction Layer
+
+No interpretation happens at this stage. The goal is faithful capture of what the document actually contains.
+
+- PDF structure parsing — separate vector geometry from raster content
+- CAD extraction — DWG / DXF layers, blocks, and entity tables
+- Targeted OCR — applied only to regions that genuinely require it
+
+The output is raw but **complete and lossless**. Nothing is inferred yet.
+
+## 2. Structural Decomposition Layer
+
+Raw fragments are grouped into meaningful units using deterministic rules:
+
+- Zones and spatial regions
+- System-level segmentation (HVAC networks, electrical circuits)
+- Repeated component detection via geometric similarity
+- Adjacency and connectivity graphs
+
+At this point the document is no longer a visual artifact. It is a **structured system model**.
+
+## 3. Schema-Based Representation Layer
+
+Entities are formalized against strict schemas, every field validated and traceable to the source geometry that produced it.
+
+- Ducts become typed flow paths with start, end, and dimensions
+- Equipment becomes labeled system nodes
+- Annotations become anchored references
+- Dimensions become validated, unit-checked measurements
+
+This is where reproducibility and auditability are won. If a downstream consumer asks "where did this value come from?", the system can point to the exact polyline on the exact page.
+
+## 4. Controlled LLM Integration
+
+Only now does the language model enter the pipeline. It never sees a raw PDF or CAD file. It operates strictly on structured data, scoped to narrow tasks:
+
+- Resolving ambiguous labels
+- Classifying equipment types from constrained vocabularies
+- Handling edge cases the rule-based layers explicitly defer
+
+:::callout info|Production Design Principle
+The LLM is a **controlled reasoning component inside a deterministic system**, not the system itself. Schema-validated input. Schema-validated output. Bounded scope. Replayable inputs. Observable outputs. If you cannot describe what the model is allowed to do in one sentence, the scope is too wide.
+:::
+
+## 5. Production Outputs
+
+The final stage produces artifacts that downstream engineering workflows actually consume:
+
+- CSV and Excel for estimation and bill-of-materials
+- JSON for APIs, databases, and integration layers
+- BIM-compatible structured datasets
+
+Every output carries provenance metadata — source page, source geometry, extraction stage, validation status. Nothing is opaque.
+
+## Conclusion
+
+LLM-only extraction fails not because the models are weak, but because they are being asked to do work that should never have reached them. The discipline is to **reduce ambiguity before the model is involved**, treat the LLM as a narrow reasoning layer, and build the rest of the system to be deterministic, observable, and maintainable.
+
+Production AI is an architecture problem. The teams that internalize that ship systems that hold up. The teams that do not keep rebuilding the same demo.`,
+  },
+
   {
     slug: "why-llm-only-fails-engineering-document-extraction",
     title: "Why LLM-Only Approaches Fail in Engineering Document Extraction — and What Works Instead",
