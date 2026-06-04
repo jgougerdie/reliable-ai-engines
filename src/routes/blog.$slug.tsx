@@ -272,7 +272,17 @@ function renderBlocks(content: string) {
     i++;
     while (i < lines.length) {
       const l = lines[i];
-      if (l.trim() === "" || l.startsWith("## ") || l.trimStart().startsWith("```") || /^\s*-\s+/.test(l) || /^\s*\d+\.\s+/.test(l)) break;
+      if (
+        l.trim() === "" ||
+        l.startsWith("## ") ||
+        l.startsWith("### ") ||
+        l.startsWith("> ") ||
+        l.startsWith(":::") ||
+        l.trimStart().startsWith("```") ||
+        /^!\[.*?\]\(.+?\)\s*$/.test(l) ||
+        /^\s*-\s+/.test(l) ||
+        /^\s*\d+\.\s+/.test(l)
+      ) break;
       paraLines.push(l);
       i++;
     }
