@@ -2,7 +2,7 @@ import type React from "react";
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { Section } from "@/components/site/Section";
 import { getPost, listPosts } from "@/data/blog";
-import { ArrowLeft, ArrowRight } from "lucide-react";
+import { ArrowLeft, ArrowRight, AlertTriangle, Lightbulb } from "lucide-react";
 
 import type { BlogPost } from "@/data/blog";
 export const Route = createFileRoute("/blog/$slug")({
@@ -86,6 +86,22 @@ function PostPage() {
         </div>
       </article>
 
+      <section className="mx-auto max-w-3xl px-6 pb-20">
+        <div className="rounded-2xl border border-border bg-[var(--surface)] p-8 md:p-10 text-center">
+          <p className="text-lg md:text-xl font-medium text-foreground max-w-2xl mx-auto leading-snug">
+            Building AI systems is easy. Building systems that survive production is harder.
+          </p>
+          <div className="mt-6">
+            <Link
+              to="/services"
+              className="inline-flex items-center gap-2 rounded-md px-5 py-2.5 text-sm font-medium btn-primary"
+            >
+              Explore AI Architecture Services <ArrowRight size={14} />
+            </Link>
+          </div>
+        </div>
+      </section>
+
       {related.length > 0 && (
         <Section eyebrow="Keep reading" title={`More in ${post.category}`}>
           <div className="grid md:grid-cols-3 gap-5">
@@ -143,9 +159,93 @@ function renderBlocks(content: string) {
     // Heading
     if (line.startsWith("## ")) {
       blocks.push(
-        <h2 key={key++} className="text-2xl font-semibold tracking-tight text-foreground mt-10">{line.slice(3)}</h2>,
+        <h2 key={key++} className="text-2xl md:text-3xl font-semibold tracking-tight text-foreground mt-14 pt-6 border-t border-border/60">{line.slice(3)}</h2>,
       );
       i++;
+      continue;
+    }
+
+    if (line.startsWith("### ")) {
+      blocks.push(
+        <h3 key={key++} className="text-xl font-semibold tracking-tight text-foreground mt-8">{line.slice(4)}</h3>,
+      );
+      i++;
+      continue;
+    }
+
+    // Blockquote (highlighted pull quote)
+    if (line.startsWith("> ")) {
+      const qLines: string[] = [];
+      while (i < lines.length && lines[i].startsWith("> ")) {
+        qLines.push(lines[i].slice(2));
+        i++;
+      }
+      blocks.push(
+        <blockquote
+          key={key++}
+          className="my-8 border-l-2 border-[color:var(--brand)] pl-6 py-2 text-xl md:text-2xl font-medium leading-snug text-foreground"
+          dangerouslySetInnerHTML={{ __html: inlineMd(qLines.join(" ")) }}
+        />,
+      );
+      continue;
+    }
+
+    // Callout: :::callout TYPE|Title  ... :::
+    if (line.startsWith(":::callout")) {
+      const header = line.slice(":::callout".length).trim();
+      const [typeRaw, ...titleParts] = header.split("|");
+      const type = (typeRaw || "info").trim();
+      const title = titleParts.join("|").trim() || (type === "warn" ? "Common Failure Modes" : "Production Design Principle");
+      const body: string[] = [];
+      i++;
+      while (i < lines.length && !lines[i].startsWith(":::")) {
+        body.push(lines[i]);
+        i++;
+      }
+      i++; // skip closing :::
+      const isWarn = type === "warn";
+      const Icon = isWarn ? AlertTriangle : Lightbulb;
+      blocks.push(
+        <aside
+          key={key++}
+          className={`my-8 rounded-xl border p-6 md:p-7 ${
+            isWarn
+              ? "border-amber-500/30 bg-amber-500/[0.04]"
+              : "border-[color:var(--brand)]/30 bg-[color:var(--brand)]/[0.04]"
+          }`}
+        >
+          <div className="flex items-center gap-2 mb-3">
+            <Icon size={16} className={isWarn ? "text-amber-400" : "text-[color:var(--brand)]"} />
+            <span className={`text-[11px] font-mono uppercase tracking-wider ${isWarn ? "text-amber-400" : "text-[color:var(--brand)]"}`}>
+              {title}
+            </span>
+          </div>
+          <div className="space-y-3 text-[15px] leading-relaxed text-foreground/90">
+            {renderBlocks(body.join("\n"))}
+          </div>
+        </aside>,
+      );
+      continue;
+    }
+
+    // Figure: ![caption](src)
+    const figMatch = line.match(/^!\[(.*?)\]\((.+?)\)\s*$/);
+    if (figMatch) {
+      const caption = figMatch[1];
+      const src = figMatch[2];
+      i++;
+      blocks.push(
+        <figure key={key++} className="my-10">
+          <div className="rounded-xl border border-border bg-[var(--surface)] p-2">
+            <img src={src} alt={caption} loading="lazy" className="w-full rounded-lg" />
+          </div>
+          {caption && (
+            <figcaption className="mt-3 text-center text-xs font-mono text-muted-foreground">
+              {caption}
+            </figcaption>
+          )}
+        </figure>,
+      );
       continue;
     }
 
@@ -188,7 +288,17 @@ function renderBlocks(content: string) {
     i++;
     while (i < lines.length) {
       const l = lines[i];
-      if (l.trim() === "" || l.startsWith("## ") || l.trimStart().startsWith("```") || /^\s*-\s+/.test(l) || /^\s*\d+\.\s+/.test(l)) break;
+      if (
+        l.trim() === "" ||
+        l.startsWith("## ") ||
+        l.startsWith("### ") ||
+        l.startsWith("> ") ||
+        l.startsWith(":::") ||
+        l.trimStart().startsWith("```") ||
+        /^!\[.*?\]\(.+?\)\s*$/.test(l) ||
+        /^\s*-\s+/.test(l) ||
+        /^\s*\d+\.\s+/.test(l)
+      ) break;
       paraLines.push(l);
       i++;
     }
