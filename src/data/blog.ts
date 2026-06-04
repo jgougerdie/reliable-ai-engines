@@ -33,8 +33,127 @@ export type BlogPost = {
 
 import coverDeterministic from "@/assets/blog-deterministic-first.jpg";
 import diagramStages from "@/assets/blog-production-ai-stages.png";
+import coverRagArchitecture from "@/assets/blog-llm-rag-architecture-cover.jpg";
+import diagramRagArchitecture from "@/assets/blog-llm-rag-architecture-diagram.png";
 
 export const posts: BlogPost[] = [
+  {
+    slug: "ai-system-architecture-llm-rag-production",
+    title: "AI System Architecture for LLM + RAG-Based Applications",
+    excerpt:
+      "Most LLM applications fail in production because of weak system architecture, not weak models. A layered pipeline for reliable, scalable RAG systems.",
+    category: "AI Architecture",
+    tags: ["RAG", "Architecture", "Production Systems", "LLM"],
+    date: "2026-06-04",
+    readingMinutes: 7,
+    cover: coverRagArchitecture,
+    content: `Most LLM-based applications fail in production not because of model limitations, but because of weak system architecture.
+
+When LLMs are connected directly to raw data without proper orchestration, retrieval, and validation layers, the system becomes unreliable, inconsistent, and difficult to scale.
+
+> A production-grade AI system is not an LLM integration. It is a structured architecture where retrieval, reasoning, and validation are clearly separated.
+
+To solve this, modern AI systems must be designed as **structured pipelines** rather than single-model solutions.
+
+## System Overview
+
+This architecture is built as a multi-layer pipeline that separates responsibilities across clearly defined components.
+
+![AI System Architecture for LLM + RAG-Based Applications](${diagramRagArchitecture})
+
+Each layer has a single job. Each layer is independently observable, testable, and replaceable.
+
+## 1. Request Layer
+
+External users or systems interact with the application through API requests. This is the entry boundary — nothing downstream trusts input that has not passed through it.
+
+## 2. API Gateway / Backend Layer
+
+This layer manages the operational concerns that protect the rest of the system:
+
+- Authentication
+- Rate limiting
+- Request validation
+- Secure routing into the system
+
+Without this layer, every downstream component has to re-implement the same defenses.
+
+## 3. Workflow Orchestrator
+
+The orchestrator controls execution flow. It is code, not an LLM decision:
+
+- Detecting user intent
+- Selecting the appropriate processing pipeline
+- Coordinating downstream components
+
+Control flow belongs to the orchestrator. The LLM chooses tools, never the graph.
+
+## 4. RAG Pipeline (Context Layer)
+
+This layer ensures the model is grounded in relevant information. It includes:
+
+- Document ingestion
+- Chunking and embedding generation
+- Storage in vector databases (Pinecone, Weaviate, Milvus)
+- Semantic retrieval of relevant context
+
+The LLM never operates on raw inputs. It operates on retrieved, scoped, validated context.
+
+## 5. LLM Layer
+
+The LLM (GPT, Claude, Llama) is responsible for reasoning and generation. A prompt engineering layer ensures instructions are structured, consistent, and aligned with system requirements.
+
+:::callout info|Design Principle
+The LLM is one component inside a deterministic system, not the system itself. Schema-validated input. Schema-validated output. Bounded scope.
+:::
+
+## 6. Validation Layer
+
+Before output is delivered, it is validated through:
+
+- JSON / schema enforcement
+- Output structure checks
+- Hallucination risk filtering against retrieved context
+
+This layer is where production safety is won. Reject early, retry deterministically, escalate when needed.
+
+## 7. Output Layer
+
+The final output is delivered through:
+
+- API responses
+- User interfaces
+- Automation systems (webhooks, external workflows)
+
+Every output carries provenance — which retrieval, which prompt, which validator passed it.
+
+## Key Design Principles
+
+:::callout info|Architecture Rules
+- Separation of retrieval and generation
+- Structured, schema-driven outputs
+- Modular system design for flexibility
+- Controlled LLM behavior instead of free-form output
+- Scalability and production readiness
+:::
+
+## Why This Architecture Matters
+
+By separating responsibilities across layers, the system becomes:
+
+- More reliable in real-world use
+- Easier to scale and maintain
+- Less prone to hallucination
+- Adaptable across multiple AI use cases
+
+This design fits applications such as internal AI assistants, document intelligence systems, workflow automation tools, and enterprise knowledge systems.
+
+## Conclusion
+
+A production-grade AI system is not just an LLM integration. It is a structured architecture where retrieval, reasoning, and validation are clearly separated.
+
+That separation is what produces predictable behavior, better performance, and long-term scalability. The teams that internalize it ship systems that hold up. The teams that do not keep rebuilding the same demo.`,
+  },
   {
     slug: "llm-only-fails-engineering-extraction-what-works",
     title: "Why LLM-Only Approaches Fail in Engineering Document Extraction — And What Works Instead",
