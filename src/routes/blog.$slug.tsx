@@ -86,6 +86,22 @@ function PostPage() {
         </div>
       </article>
 
+      <section className="mx-auto max-w-3xl px-6 pb-20">
+        <div className="rounded-2xl border border-border bg-[var(--surface)] p-8 md:p-10 text-center">
+          <p className="text-lg md:text-xl font-medium text-foreground max-w-2xl mx-auto leading-snug">
+            Building AI systems is easy. Building systems that survive production is harder.
+          </p>
+          <div className="mt-6">
+            <Link
+              to="/services"
+              className="inline-flex items-center gap-2 rounded-md px-5 py-2.5 text-sm font-medium btn-primary"
+            >
+              Explore AI Architecture Services <ArrowRight size={14} />
+            </Link>
+          </div>
+        </div>
+      </section>
+
       {related.length > 0 && (
         <Section eyebrow="Keep reading" title={`More in ${post.category}`}>
           <div className="grid md:grid-cols-3 gap-5">
