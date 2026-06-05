@@ -3,6 +3,7 @@ import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { Section } from "@/components/site/Section";
 import { getPost, listPosts } from "@/data/blog";
 import { ArrowLeft, ArrowRight, AlertTriangle, Lightbulb } from "lucide-react";
+import { Mermaid } from "@/components/site/Mermaid";
 
 import type { BlogPost } from "@/data/blog";
 export const Route = createFileRoute("/blog/$slug")({
