@@ -136,6 +136,7 @@ function renderBlocks(content: string) {
 
     // Code fence
     if (line.trimStart().startsWith("```")) {
+      const fenceLang = line.trimStart().slice(3).trim();
       const codeLines: string[] = [];
       i++;
       while (i < lines.length && !lines[i].trimStart().startsWith("```")) {
@@ -143,6 +144,10 @@ function renderBlocks(content: string) {
         i++;
       }
       i++; // skip closing fence
+      if (fenceLang === "mermaid") {
+        blocks.push(<Mermaid key={key++} chart={codeLines.join("\n")} />);
+        continue;
+      }
       blocks.push(
         <pre key={key++} className="bg-[var(--surface)] border border-border rounded-lg p-4 overflow-x-auto text-[13px] leading-relaxed font-mono text-foreground/90">
           <code>{codeLines.join("\n")}</code>
