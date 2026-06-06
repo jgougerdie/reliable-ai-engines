@@ -584,12 +584,12 @@ LLM cost is an engineering metric. Treat it like latency: measure it, attribute 
   // ──────────────────────────────────────────────────────────
   {
     slug: "tutorial-langgraph-validation-loops",
-    title: "Tutorial: Building Self-Correcting Agents with LangGraph",
+    title: "Tutorial: Building Validation Loops in LangGraph",
     excerpt:
       "A code-first walkthrough of self-correcting agents using critique nodes, retry budgets, and structured outputs — the architecture pattern behind reliable extraction.",
     category: "Tutorials",
     tags: ["LangGraph", "Tutorial", "Validation"],
-    date: "2026-03-20",
+    date: "2025-01-08",
     readingMinutes: 12,
     content: `In this tutorial we build a self-correcting LangGraph agent. The producer node generates a candidate; the critic node validates it against a schema and rubric; the controller decides whether to accept, retry, or escalate. By the end you will have a working graph you can adapt to extraction, code generation, or any task where "wrong but confident" is the failure mode you need to eliminate.
 
