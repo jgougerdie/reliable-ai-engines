@@ -60,7 +60,9 @@ function PostPage() {
       </section>
 
       <article className="mx-auto max-w-3xl px-6 py-12">
-        {post.cover && (
+        {post.slug === "llm-only-fails-engineering-extraction-what-works" ? (
+          <DeterministicPipeline />
+        ) : post.cover ? (
           <img
             src={post.cover}
             alt={post.title}
@@ -68,7 +70,7 @@ function PostPage() {
             height={1080}
             className="mb-10 w-full rounded-xl border border-border"
           />
-        )}
+        ) : null}
         <span className="chip">{post.category}</span>
         <h1 className="mt-5 text-3xl md:text-5xl font-semibold tracking-tight leading-[1.1]">{post.title}</h1>
         <div className="mt-5 flex items-center gap-3 text-xs font-mono text-muted-foreground">
