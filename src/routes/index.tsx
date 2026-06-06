@@ -3,7 +3,7 @@ import {
   ArrowRight, Cpu, Database, Workflow, Network, Cloud, Layers,
   CheckCircle2, Sparkles,
 } from "lucide-react";
-import heroImg from "@/assets/hero-network.jpg";
+import { AgentGraph } from "@/components/site/AgentGraph";
 import { Section } from "@/components/site/Section";
 import { projects } from "@/data/projects";
 import { posts } from "@/data/blog";
@@ -90,14 +90,7 @@ function Home() {
           </div>
           <div className="relative animate-fade-up">
             <div className="absolute -inset-6 bg-gradient-to-tr from-[var(--brand)]/20 to-[var(--brand-violet)]/20 blur-3xl rounded-3xl" />
-            <div className="relative card-glow rounded-2xl overflow-hidden animate-float">
-              <img src={heroImg} alt="AI infrastructure network visualization" width={1600} height={1024} className="w-full h-auto"/>
-              <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-transparent to-transparent" />
-              <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between font-mono text-[11px] text-muted-foreground">
-                <span className="chip animate-pulse-soft">● live · multi-agent</span>
-                <span>orchestration.graph</span>
-              </div>
-            </div>
+            <AgentGraph />
           </div>
         </div>
       </section>
