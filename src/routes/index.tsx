@@ -3,7 +3,7 @@ import {
   ArrowRight, Cpu, Database, Workflow, Network, Cloud, Layers,
   CheckCircle2, Sparkles,
 } from "lucide-react";
-import heroImg from "@/assets/hero-network.jpg";
+import { AgentGraph } from "@/components/site/AgentGraph";
 import { Section } from "@/components/site/Section";
 import { projects } from "@/data/projects";
 import { posts } from "@/data/blog";
