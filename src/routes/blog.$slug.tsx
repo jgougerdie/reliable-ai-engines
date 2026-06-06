@@ -4,6 +4,7 @@ import { Section } from "@/components/site/Section";
 import { getPost, listPosts } from "@/data/blog";
 import { ArrowLeft, ArrowRight, AlertTriangle, Lightbulb } from "lucide-react";
 import { Mermaid } from "@/components/site/Mermaid";
+import { DeterministicPipeline } from "@/components/site/DeterministicPipeline";
 
 import type { BlogPost } from "@/data/blog";
 export const Route = createFileRoute("/blog/$slug")({
