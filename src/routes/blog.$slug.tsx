@@ -2,9 +2,23 @@ import type React from "react";
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { Section } from "@/components/site/Section";
 import { getPost, listPosts } from "@/data/blog";
-import { ArrowLeft, ArrowRight, AlertTriangle, Lightbulb } from "lucide-react";
+import { ArrowLeft, ArrowRight, AlertTriangle, Lightbulb, Download, Briefcase } from "lucide-react";
 import { Mermaid } from "@/components/site/Mermaid";
 import { DeterministicPipeline } from "@/components/site/DeterministicPipeline";
+
+// Maps a figure image src (substring match) to a downloadable high-res PDF.
+const DIAGRAM_PDF_MAP: Array<{ match: string; href: string; label: string }> = [
+  {
+    match: "llm-rag-architecture-diagram",
+    href: "/diagrams/llm-rag-7-layer-architecture.pdf",
+    label: "Download High-Res Architecture Diagram (PDF)",
+  },
+  {
+    match: "production-ai-stages",
+    href: "/diagrams/deterministic-document-pipeline.pdf",
+    label: "Download High-Res Pipeline Diagram (PDF)",
+  },
+];
 
 import type { BlogPost } from "@/data/blog";
 export const Route = createFileRoute("/blog/$slug")({
@@ -90,21 +104,39 @@ function PostPage() {
         </div>
       </article>
 
-      <section className="mx-auto max-w-3xl px-6 pb-20">
-        <div className="rounded-2xl border border-border bg-[var(--surface)] p-8 md:p-10 text-center">
-          <p className="text-lg md:text-xl font-medium text-foreground max-w-2xl mx-auto leading-snug">
-            Building AI systems is easy. Building systems that survive production is harder.
+      <section className="mx-auto max-w-3xl px-6 pb-10">
+        <div className="rounded-2xl border border-[color:var(--brand)]/30 bg-gradient-to-br from-[color:var(--brand)]/[0.08] to-[color:var(--brand-violet)]/[0.06] p-8 md:p-10">
+          <div className="flex items-center gap-2 mb-3">
+            <Briefcase size={16} className="text-[color:var(--brand)]" />
+            <span className="text-[11px] font-mono uppercase tracking-wider text-[color:var(--brand)]">
+              Upwork-friendly engagement
+            </span>
+          </div>
+          <p className="text-lg md:text-xl font-medium text-foreground max-w-2xl leading-snug">
+            Looking to implement this exact architecture in your business? Hire me directly on Upwork to audit your current system or build your production pipeline.
           </p>
-          <div className="mt-6">
-            <Link
-              to="/services"
+          <p className="mt-3 text-sm text-muted-foreground max-w-2xl">
+            Fixed-scope audits, milestone-based builds, NDA-friendly. Most engagements start within a week.
+          </p>
+          <div className="mt-6 flex flex-wrap gap-3">
+            <a
+              href="https://www.upwork.com/freelancers/~"
+              target="_blank"
+              rel="noopener noreferrer"
               className="inline-flex items-center gap-2 rounded-md px-5 py-2.5 text-sm font-medium btn-primary"
             >
-              Explore AI Architecture Services <ArrowRight size={14} />
+              Hire me on Upwork <ArrowRight size={14} />
+            </a>
+            <Link
+              to="/contact"
+              className="inline-flex items-center gap-2 rounded-md px-5 py-2.5 text-sm font-medium border border-border hover:border-[color:var(--brand)]/60 transition-colors"
+            >
+              Book a direct consultation
             </Link>
           </div>
         </div>
       </section>
+
 
       {related.length > 0 && (
         <Section eyebrow="Keep reading" title={`More in ${post.category}`}>
@@ -243,6 +275,7 @@ function renderBlocks(content: string) {
       const caption = figMatch[1];
       const src = figMatch[2];
       i++;
+      const pdf = DIAGRAM_PDF_MAP.find((d) => src.includes(d.match));
       blocks.push(
         <figure key={key++} className="my-10">
           <div className="rounded-xl border border-border bg-[var(--surface)] p-2">
@@ -252,6 +285,17 @@ function renderBlocks(content: string) {
             <figcaption className="mt-3 text-center text-xs font-mono text-muted-foreground">
               {caption}
             </figcaption>
+          )}
+          {pdf && (
+            <div className="mt-4 flex justify-center">
+              <a
+                href={pdf.href}
+                download
+                className="inline-flex items-center gap-2 rounded-md px-4 py-2 text-sm font-medium border border-[color:var(--brand)]/40 bg-[color:var(--brand)]/[0.06] text-foreground hover:bg-[color:var(--brand)]/[0.12] transition-colors"
+              >
+                <Download size={14} /> {pdf.label}
+              </a>
+            </div>
           )}
         </figure>,
       );
