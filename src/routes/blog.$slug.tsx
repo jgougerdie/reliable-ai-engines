@@ -2,9 +2,23 @@ import type React from "react";
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { Section } from "@/components/site/Section";
 import { getPost, listPosts } from "@/data/blog";
-import { ArrowLeft, ArrowRight, AlertTriangle, Lightbulb } from "lucide-react";
+import { ArrowLeft, ArrowRight, AlertTriangle, Lightbulb, Download, Briefcase } from "lucide-react";
 import { Mermaid } from "@/components/site/Mermaid";
 import { DeterministicPipeline } from "@/components/site/DeterministicPipeline";
+
+// Maps a figure image src (substring match) to a downloadable high-res PDF.
+const DIAGRAM_PDF_MAP: Array<{ match: string; href: string; label: string }> = [
+  {
+    match: "llm-rag-architecture-diagram",
+    href: "/diagrams/llm-rag-7-layer-architecture.pdf",
+    label: "Download High-Res Architecture Diagram (PDF)",
+  },
+  {
+    match: "production-ai-stages",
+    href: "/diagrams/deterministic-document-pipeline.pdf",
+    label: "Download High-Res Pipeline Diagram (PDF)",
+  },
+];
 
 import type { BlogPost } from "@/data/blog";
 export const Route = createFileRoute("/blog/$slug")({
