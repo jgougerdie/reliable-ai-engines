@@ -275,6 +275,7 @@ function renderBlocks(content: string) {
       const caption = figMatch[1];
       const src = figMatch[2];
       i++;
+      const pdf = DIAGRAM_PDF_MAP.find((d) => src.includes(d.match));
       blocks.push(
         <figure key={key++} className="my-10">
           <div className="rounded-xl border border-border bg-[var(--surface)] p-2">
@@ -284,6 +285,17 @@ function renderBlocks(content: string) {
             <figcaption className="mt-3 text-center text-xs font-mono text-muted-foreground">
               {caption}
             </figcaption>
+          )}
+          {pdf && (
+            <div className="mt-4 flex justify-center">
+              <a
+                href={pdf.href}
+                download
+                className="inline-flex items-center gap-2 rounded-md px-4 py-2 text-sm font-medium border border-[color:var(--brand)]/40 bg-[color:var(--brand)]/[0.06] text-foreground hover:bg-[color:var(--brand)]/[0.12] transition-colors"
+              >
+                <Download size={14} /> {pdf.label}
+              </a>
+            </div>
           )}
         </figure>,
       );
