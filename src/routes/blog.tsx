@@ -18,7 +18,7 @@ export const Route = createFileRoute("/blog")({
   component: BlogLayout,
 });
 
-const PAGE_SIZE = 6;
+const PAGE_SIZE = 24;
 
 function BlogLayout() {
   const matches = useMatches();

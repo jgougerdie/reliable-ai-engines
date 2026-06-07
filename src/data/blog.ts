@@ -216,6 +216,19 @@ Where production safety is won: schema enforcement, output structure checks, hal
 
 API responses, UI surfaces, downstream webhooks — every output carries provenance metadata (which retrieval, which prompt, which validator passed it).
 
+## Deploying This Pipeline on Cloud Infrastructure
+
+The reference architecture above is platform-agnostic, but in enterprise engagements we ship it on a specific cloud footprint. The recommended deployment shape:
+
+- **Compute:** containerized services on **AWS ECS with Fargate** (or GKE Autopilot / Azure Container Apps). Each layer — gateway, orchestrator, retrieval, LLM proxy, validator — runs as an independent service with its own autoscaling profile. Fargate eliminates node management and makes per-request cost attribution clean.
+- **Vector store:** managed Pinecone, OpenSearch Serverless (k-NN), or pgvector on Aurora Serverless v2. The choice is driven by hybrid-search requirements and existing data-residency commitments, not benchmark headlines.
+- **Identity & access:** **enterprise IAM-driven metadata filtering** at retrieval time. The user's identity (via Cognito, Entra ID, or Okta) is exchanged for short-lived AWS STS credentials, and those credentials carry session tags (department, clearance, region) that the retriever pushes directly into the vector query as metadata filters. Permissions are enforced **before** results enter the LLM context window — never after.
+- **Secrets & keys:** AWS Secrets Manager / Parameter Store for model API keys; KMS-encrypted envelopes for tenant-specific embeddings.
+- **Observability:** OpenTelemetry traces to CloudWatch + a managed tracing backend (LangSmith, Langfuse, or Datadog). Every request carries a correlation ID through all seven layers.
+- **Deployment:** blue/green via ECS deployment circuit breakers; eval-gated promotion — a build only reaches production if the golden-set harness passes.
+
+This is the same footprint that powers the production systems referenced in the case studies. It is boring on purpose — boring infrastructure is what lets the AI layer be interesting.
+
 ## Tradeoffs and Design Decisions
 
 - **Latency vs. reliability.** Each layer adds milliseconds. Each layer also removes a class of silent failure. Default to reliability.
@@ -589,9 +602,11 @@ LLM cost is an engineering metric. Treat it like latency: measure it, attribute 
       "A code-first walkthrough of self-correcting agents using critique nodes, retry budgets, and structured outputs — the architecture pattern behind reliable extraction.",
     category: "Tutorials",
     tags: ["LangGraph", "Tutorial", "Validation"],
-    date: "2025-01-08",
+    date: "2026-03-18",
     readingMinutes: 12,
     content: `In this tutorial we build a self-correcting LangGraph agent. The producer node generates a candidate; the critic node validates it against a schema and rubric; the controller decides whether to accept, retry, or escalate. By the end you will have a working graph you can adapt to extraction, code generation, or any task where "wrong but confident" is the failure mode you need to eliminate.
+
+> To be explicit about the philosophy: the LangGraph implementation below is a **deterministic graph** where execution paths are locked down in code. Nodes, edges, retry budgets, and escalation thresholds are all defined by the engineer — not chosen by the model at runtime. This is intentional. It is the opposite of an unbounded, fully autonomous agent loop that decides its own control flow and "figures it out." Autonomy at the control-flow level is what makes agents non-reproducible, unbounded in cost, and impossible to debug. We keep the model on a short leash precisely so the system can be audited, replayed, and shipped to production.
 
 ## The Architecture
 
@@ -760,7 +775,11 @@ Four properties that separate this from a demo:
 - Replace the rubric-based critic with a **deterministic validator** wherever possible (regex, schema, business rules). LLM critics are a fallback, not a default.
 - Swap the producer for a tool-calling agent when extraction isn't enough and the model actually needs to query systems.
 
-The architecture stays the same. That's the point.`,
+The architecture stays the same. That's the point.
+
+:::callout info|Production-Ready Repository Available
+The complete production repo — graph definition, typed state, evaluation harness, golden test set, Dockerfile, and docker-compose for local LangSmith tracing — is part of my private component library. If you want this dropped into your stack (or adapted to your domain), reach out via the consulting form or hire me on Upwork and I'll ship a tailored version against your data within days, not weeks. This is one of ~20 production-ready building blocks I reuse across client engagements to compress delivery time.
+:::`,
   },
 
   // ──────────────────────────────────────────────────────────
