@@ -8,7 +8,7 @@ import { Section } from "@/components/site/Section";
 import { projects } from "@/data/projects";
 import { posts } from "@/data/blog";
 
-export const Route = createFileRoute("/")({
+export const Route = createFileRoute("/home")({
   head: () => ({
     meta: [
       { title: "AI Architect — Production-Grade LLM, RAG & Agent Systems" },

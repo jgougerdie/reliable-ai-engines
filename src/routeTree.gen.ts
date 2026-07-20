@@ -14,10 +14,10 @@ import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as ServicesRouteImport } from './routes/services'
 import { Route as PortfolioRouteImport } from './routes/portfolio'
 import { Route as McpRouteImport } from './routes/mcp'
+import { Route as HomeRouteImport } from './routes/home'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as BlogRouteImport } from './routes/blog'
 import { Route as AboutRouteImport } from './routes/about'
-import { Route as IndexRouteImport } from './routes/index'
 import { Route as PortfolioSlugRouteImport } from './routes/portfolio.$slug'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
 import { Route as Char91DotwellKnownChar93OauthProtectedResourceRouteImport } from './routes/[.well-known]/oauth-protected-resource'
@@ -49,6 +49,11 @@ const McpRoute = McpRouteImport.update({
   path: '/mcp',
   getParentRoute: () => rootRouteImport,
 } as any)
+const HomeRoute = HomeRouteImport.update({
+  id: '/home',
+  path: '/home',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ContactRoute = ContactRouteImport.update({
   id: '/contact',
   path: '/contact',
@@ -62,11 +67,6 @@ const BlogRoute = BlogRouteImport.update({
 const AboutRoute = AboutRouteImport.update({
   id: '/about',
   path: '/about',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PortfolioSlugRoute = PortfolioSlugRouteImport.update({
@@ -99,10 +99,10 @@ const Char91DotmcpChar93InvokeToolToolRoute =
   } as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/blog': typeof BlogRouteWithChildren
   '/contact': typeof ContactRoute
+  '/home': typeof HomeRoute
   '/mcp': typeof McpRoute
   '/portfolio': typeof PortfolioRouteWithChildren
   '/services': typeof ServicesRoute
@@ -115,10 +115,10 @@ export interface FileRoutesByFullPath {
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/blog': typeof BlogRouteWithChildren
   '/contact': typeof ContactRoute
+  '/home': typeof HomeRoute
   '/mcp': typeof McpRoute
   '/portfolio': typeof PortfolioRouteWithChildren
   '/services': typeof ServicesRoute
@@ -132,10 +132,10 @@ export interface FileRoutesByTo {
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/blog': typeof BlogRouteWithChildren
   '/contact': typeof ContactRoute
+  '/home': typeof HomeRoute
   '/mcp': typeof McpRoute
   '/portfolio': typeof PortfolioRouteWithChildren
   '/services': typeof ServicesRoute
@@ -150,10 +150,10 @@ export interface FileRoutesById {
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    | '/'
     | '/about'
     | '/blog'
     | '/contact'
+    | '/home'
     | '/mcp'
     | '/portfolio'
     | '/services'
@@ -166,10 +166,10 @@ export interface FileRouteTypes {
     | '/.mcp/invoke-tool/$tool'
   fileRoutesByTo: FileRoutesByTo
   to:
-    | '/'
     | '/about'
     | '/blog'
     | '/contact'
+    | '/home'
     | '/mcp'
     | '/portfolio'
     | '/services'
@@ -182,10 +182,10 @@ export interface FileRouteTypes {
     | '/.mcp/invoke-tool/$tool'
   id:
     | '__root__'
-    | '/'
     | '/about'
     | '/blog'
     | '/contact'
+    | '/home'
     | '/mcp'
     | '/portfolio'
     | '/services'
@@ -199,10 +199,10 @@ export interface FileRouteTypes {
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
   BlogRoute: typeof BlogRouteWithChildren
   ContactRoute: typeof ContactRoute
+  HomeRoute: typeof HomeRoute
   McpRoute: typeof McpRoute
   PortfolioRoute: typeof PortfolioRouteWithChildren
   ServicesRoute: typeof ServicesRoute
@@ -250,6 +250,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof McpRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/home': {
+      id: '/home'
+      path: '/home'
+      fullPath: '/home'
+      preLoaderRoute: typeof HomeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/contact': {
       id: '/contact'
       path: '/contact'
@@ -269,13 +276,6 @@ declare module '@tanstack/react-router' {
       path: '/about'
       fullPath: '/about'
       preLoaderRoute: typeof AboutRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/portfolio/$slug': {
@@ -339,10 +339,10 @@ const PortfolioRouteWithChildren = PortfolioRoute._addFileChildren(
 )
 
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
   BlogRoute: BlogRouteWithChildren,
   ContactRoute: ContactRoute,
+  HomeRoute: HomeRoute,
   McpRoute: McpRoute,
   PortfolioRoute: PortfolioRouteWithChildren,
   ServicesRoute: ServicesRoute,
