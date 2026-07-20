@@ -1,0 +1,129 @@
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { ArrowRight } from "lucide-react";
+import { LandingChat } from "@/components/landing/LandingChat";
+
+export const Route = createFileRoute("/")({
+  head: () => ({
+    meta: [
+      { title: "Architect.systems — Production AI, Answered Live" },
+      {
+        name: "description",
+        content:
+          "The consulting practice of a senior AI Architect. Ask the on-site assistant about services and case studies, or step inside the full site.",
+      },
+      { property: "og:title", content: "Architect.systems — Production AI, Answered Live" },
+      {
+        property: "og:description",
+        content: "LLM, RAG, and agent systems engineered for production. Talk to the on-site AI or enter the site.",
+      },
+    ],
+  }),
+  component: Landing,
+});
+
+function Landing() {
+  return (
+    <main className="relative min-h-screen overflow-hidden bg-[#05070d] text-white">
+      {/* Ambient background */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0"
+        style={{
+          background:
+            "radial-gradient(ellipse 60% 50% at 20% 15%, rgba(106,168,255,0.18), transparent 60%), radial-gradient(ellipse 50% 40% at 85% 85%, rgba(180,123,255,0.16), transparent 60%), radial-gradient(ellipse 80% 60% at 50% 100%, rgba(10,20,50,0.7), transparent 70%)",
+        }}
+      />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 opacity-[0.05]"
+        style={{
+          backgroundImage:
+            "linear-gradient(rgba(255,255,255,0.7) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.7) 1px, transparent 1px)",
+          backgroundSize: "56px 56px",
+        }}
+      />
+
+      <div className="relative z-10 mx-auto flex min-h-screen max-w-7xl flex-col px-6 py-8">
+        {/* Top bar */}
+        <header className="flex items-center justify-between">
+          <Link to="/" className="flex items-center gap-2">
+            <span className="relative inline-flex h-8 w-8 items-center justify-center rounded-md bg-gradient-to-br from-[var(--brand)] to-[var(--brand-violet)] shadow-[0_0_28px_-4px_var(--brand)]">
+              <span className="font-mono text-[11px] font-bold text-white">AI</span>
+            </span>
+            <span className="font-semibold tracking-tight">
+              <span className="text-white">Architect</span>
+              <span className="text-white/50">.systems</span>
+            </span>
+          </Link>
+          <Link
+            to="/home"
+            className="group inline-flex items-center gap-1.5 rounded-full border border-white/15 bg-white/[0.03] px-4 py-2 text-xs font-medium tracking-wide text-white/80 transition hover:border-white/40 hover:bg-white/[0.06] hover:text-white"
+          >
+            Enter site
+            <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
+          </Link>
+        </header>
+
+        {/* Hero + Chat */}
+        <section className="grid flex-1 grid-cols-1 items-center gap-12 py-12 lg:grid-cols-[1.05fr_1fr] lg:gap-16 lg:py-20">
+          {/* Left — pitch */}
+          <div className="flex flex-col">
+            <span className="inline-flex w-fit items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-3 py-1 text-[10px] uppercase tracking-[0.28em] text-white/60">
+              <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 shadow-[0_0_10px_rgba(52,211,153,0.9)]" />
+              Available for Q3 2026
+            </span>
+
+            <h1 className="mt-6 font-serif text-5xl leading-[1.02] tracking-tight text-white sm:text-6xl lg:text-7xl">
+              Production AI,{" "}
+              <span className="italic text-white/80">answered live.</span>
+            </h1>
+
+            <p className="mt-6 max-w-xl text-lg leading-relaxed text-white/70">
+              A senior AI Architect for LLM, RAG, and multi-agent systems that survive production.
+              Ask the on-site assistant about services and case studies — or step inside.
+            </p>
+
+            <div className="mt-8 flex flex-wrap items-center gap-3">
+              <Link
+                to="/home"
+                className="group inline-flex items-center gap-2 rounded-lg bg-gradient-to-r from-[var(--brand)] to-[var(--brand-violet)] px-5 py-3 text-sm font-medium text-white shadow-[0_10px_40px_-10px_rgba(106,168,255,0.7)] transition hover:opacity-95"
+              >
+                Enter the full site
+                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+              </Link>
+              <Link
+                to="/portfolio"
+                className="inline-flex items-center gap-2 rounded-lg border border-white/15 px-5 py-3 text-sm font-medium text-white/80 transition hover:border-white/40 hover:text-white"
+              >
+                View case studies
+              </Link>
+            </div>
+
+            <dl className="mt-12 grid max-w-md grid-cols-3 gap-6 border-t border-white/10 pt-6">
+              {[
+                { k: "8+", v: "yrs shipping AI" },
+                { k: "LLM · RAG", v: "· Agents" },
+                { k: "AWS", v: "production" },
+              ].map((s) => (
+                <div key={s.v}>
+                  <dt className="font-serif text-2xl text-white">{s.k}</dt>
+                  <dd className="mt-1 text-[11px] uppercase tracking-wider text-white/45">{s.v}</dd>
+                </div>
+              ))}
+            </dl>
+          </div>
+
+          {/* Right — Chat */}
+          <div className="flex justify-center lg:justify-end">
+            <LandingChat />
+          </div>
+        </section>
+
+        {/* Footer hint */}
+        <footer className="flex flex-col items-center gap-2 pb-4 pt-8 text-center text-[11px] uppercase tracking-[0.3em] text-white/35">
+          <span>Scroll or press "Enter site" to explore</span>
+        </footer>
+      </div>
+    </main>
+  );
+}
