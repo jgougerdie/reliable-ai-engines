@@ -37,10 +37,10 @@ function Headline3D() {
   }, []);
 
   return (
-    <div className="mt-6 [perspective:1000px]">
+    <div className="mt-6 animate-float [perspective:1000px]">
       <h1
         ref={ref}
-        className="headline-float relative font-serif text-5xl leading-[1.02] tracking-tight text-white transition-transform duration-300 ease-out will-change-transform sm:text-6xl lg:text-7xl"
+        className="relative font-serif text-5xl leading-[1.02] tracking-tight text-white transition-transform duration-300 ease-out will-change-transform sm:text-6xl lg:text-7xl"
         style={{
           transform: `rotateX(${t.rx}deg) rotateY(${t.ry}deg)`,
           transformStyle: "preserve-3d",
