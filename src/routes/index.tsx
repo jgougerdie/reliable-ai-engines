@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight } from "lucide-react";
-import { lazy, Suspense, useEffect, useState } from "react";
+import { lazy, Suspense, useEffect, useRef, useState } from "react";
 import { LandingChat } from "@/components/landing/LandingChat";
 
 const LandingScene3D = lazy(() => import("@/components/landing/LandingScene3D"));
