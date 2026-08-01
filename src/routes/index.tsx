@@ -60,6 +60,19 @@ function Landing() {
         }}
       />
 
+      {/* 3D scene */}
+      <Scene3DLayer />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0"
+        style={{
+          background:
+            "radial-gradient(ellipse 70% 60% at 30% 45%, rgba(5,7,13,0.82), rgba(5,7,13,0.35) 55%, transparent 75%)",
+        }}
+      />
+
+
+
       <div className="relative z-10 mx-auto flex min-h-screen max-w-7xl flex-col px-6 py-8">
         {/* Top bar */}
         <header className="flex items-center justify-between">
