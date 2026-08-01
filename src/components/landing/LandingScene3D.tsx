@@ -153,6 +153,7 @@ export default function LandingScene3D() {
       knot.rotation.x = Math.sin(t * 0.2) * 0.22;
       knotWire.rotation.copy(knot.rotation);
       knotWire.rotation.y += 0.2;
+      knotGlow.rotation.copy(knot.rotation);
 
       nodes.forEach((n, i) => {
         const a = t * (0.35 + i * 0.05) * speed + (i / nodes.length) * Math.PI * 2;
