@@ -26,39 +26,45 @@ export default function LandingScene3D() {
     renderer.setClearColor(0x000000, 0);
     host.appendChild(renderer.domElement);
 
-    const BRAND = 0x6aa8ff;
-    const VIOLET = 0xb47bff;
+    const NEON = 0x00e5ff; // electric cyan-blue
+    const DEEP = 0x2f7bff; // deep neon blue
 
     // Lights
-    scene.add(new THREE.AmbientLight(0x93b4ff, 0.5));
-    const key = new THREE.PointLight(BRAND, 60, 60);
+    scene.add(new THREE.AmbientLight(0x0a2a4d, 0.6));
+    const key = new THREE.PointLight(NEON, 90, 60);
     key.position.set(6, 5, 8);
     scene.add(key);
-    const rim = new THREE.PointLight(VIOLET, 45, 60);
+    const rim = new THREE.PointLight(DEEP, 70, 60);
     rim.position.set(-7, -4, 4);
     scene.add(rim);
 
     const group = new THREE.Group();
     scene.add(group);
 
-    // Central knot — the "system"
+    // Central knot — the "system": dark core with a neon wireframe shell
     const knot = new THREE.Mesh(
       new THREE.TorusKnotGeometry(1.7, 0.34, 220, 32, 2, 3),
       new THREE.MeshStandardMaterial({
-        color: 0x0d1526,
-        emissive: BRAND,
-        emissiveIntensity: 0.22,
-        metalness: 0.9,
-        roughness: 0.22,
-        wireframe: false,
+        color: 0x040c18,
+        emissive: NEON,
+        emissiveIntensity: 0.35,
+        metalness: 1,
+        roughness: 0.12,
       }),
     );
     knot.position.set(0.6, 0.2, 0);
     group.add(knot);
 
+    const knotGlow = new THREE.Mesh(
+      new THREE.TorusKnotGeometry(1.72, 0.36, 140, 14, 2, 3),
+      new THREE.MeshBasicMaterial({ color: NEON, wireframe: true, transparent: true, opacity: 0.45 }),
+    );
+    knotGlow.position.copy(knot.position);
+    group.add(knotGlow);
+
     const knotWire = new THREE.Mesh(
-      new THREE.TorusKnotGeometry(1.9, 0.02, 160, 16, 2, 3),
-      new THREE.MeshBasicMaterial({ color: VIOLET, transparent: true, opacity: 0.35 }),
+      new THREE.TorusKnotGeometry(1.95, 0.015, 200, 12, 2, 3),
+      new THREE.MeshBasicMaterial({ color: 0x8fefff, transparent: true, opacity: 0.6 }),
     );
     knotWire.position.copy(knot.position);
     group.add(knotWire);
@@ -70,13 +76,18 @@ export default function LandingScene3D() {
       const m = new THREE.Mesh(
         nodeGeo,
         new THREE.MeshStandardMaterial({
-          color: i % 2 ? VIOLET : BRAND,
-          emissive: i % 2 ? VIOLET : BRAND,
-          emissiveIntensity: 0.7,
-          roughness: 0.3,
-          metalness: 0.6,
+          color: i % 2 ? NEON : DEEP,
+          emissive: i % 2 ? NEON : DEEP,
+          emissiveIntensity: 1.5,
+          roughness: 0.2,
+          metalness: 0.4,
         }),
       );
+      const halo = new THREE.Mesh(
+        new THREE.IcosahedronGeometry(0.34, 0),
+        new THREE.MeshBasicMaterial({ color: NEON, wireframe: true, transparent: true, opacity: 0.4 }),
+      );
+      m.add(halo);
       group.add(m);
       nodes.push(m);
     }
@@ -86,9 +97,9 @@ export default function LandingScene3D() {
       const ring = new THREE.Mesh(
         new THREE.RingGeometry(3.4 + i * 0.9, 3.41 + i * 0.9, 128),
         new THREE.MeshBasicMaterial({
-          color: i % 2 ? VIOLET : BRAND,
+          color: i % 2 ? DEEP : NEON,
           transparent: true,
-          opacity: 0.14,
+          opacity: 0.22,
           side: THREE.DoubleSide,
         }),
       );
@@ -97,6 +108,7 @@ export default function LandingScene3D() {
       ring.position.copy(knot.position);
       group.add(ring);
     }
+
 
     // Starfield
     const starCount = 900;
