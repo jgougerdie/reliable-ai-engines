@@ -122,7 +122,7 @@ export default function LandingScene3D() {
     starGeo.setAttribute("position", new THREE.BufferAttribute(positions, 3));
     const stars = new THREE.Points(
       starGeo,
-      new THREE.PointsMaterial({ color: 0x9fc0ff, size: 0.06, transparent: true, opacity: 0.7 }),
+      new THREE.PointsMaterial({ color: 0x62f0ff, size: 0.07, transparent: true, opacity: 0.75 }),
     );
     scene.add(stars);
 
