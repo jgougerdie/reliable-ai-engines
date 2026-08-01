@@ -12,7 +12,7 @@ export function Headline3D() {
       const r = el.getBoundingClientRect();
       const cx = (e.clientX - (r.left + r.width / 2)) / (r.width / 2);
       const cy = (e.clientY - (r.top + r.height / 2)) / (r.height / 2);
-      setT({ rx: Math.max(-1, Math.min(1, cy)) * -8, ry: Math.max(-1, Math.min(1, cx)) * 12 });
+      setT({ rx: Math.max(-1, Math.min(1, cy)) * -8, ry: Math.max(-1, Math.min(1, cx)) * 8 });
     };
     window.addEventListener("pointermove", onMove);
     return () => window.removeEventListener("pointermove", onMove);
@@ -36,7 +36,7 @@ export function Headline3D() {
         >
           Production AI, <span className="italic">answered live.</span>
         </span>
-        <span className="relative block" style={{ transform: "translateZ(45px)" }}>
+        <span className="relative block" style={{ transform: "translateZ(32px)" }}>
           Production AI,{" "}
           <span
             className="italic text-white/85"
