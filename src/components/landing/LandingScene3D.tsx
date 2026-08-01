@@ -18,7 +18,7 @@ export default function LandingScene3D() {
     scene.fog = new THREE.FogExp2(0x05070d, 0.055);
 
     const camera = new THREE.PerspectiveCamera(48, host.clientWidth / host.clientHeight, 0.1, 100);
-    camera.position.set(0, 0, 12);
+    camera.position.set(0, 0, 16);
 
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: "high-performance" });
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
@@ -43,7 +43,7 @@ export default function LandingScene3D() {
 
     // Central knot — the "system"
     const knot = new THREE.Mesh(
-      new THREE.TorusKnotGeometry(2.1, 0.42, 220, 32, 2, 3),
+      new THREE.TorusKnotGeometry(1.7, 0.34, 220, 32, 2, 3),
       new THREE.MeshStandardMaterial({
         color: 0x0d1526,
         emissive: BRAND,
@@ -57,7 +57,7 @@ export default function LandingScene3D() {
     group.add(knot);
 
     const knotWire = new THREE.Mesh(
-      new THREE.TorusKnotGeometry(2.35, 0.02, 160, 16, 2, 3),
+      new THREE.TorusKnotGeometry(1.9, 0.02, 160, 16, 2, 3),
       new THREE.MeshBasicMaterial({ color: VIOLET, transparent: true, opacity: 0.35 }),
     );
     knotWire.position.copy(knot.position);
