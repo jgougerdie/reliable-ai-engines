@@ -1,6 +1,23 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight } from "lucide-react";
+import { lazy, Suspense, useEffect, useState } from "react";
 import { LandingChat } from "@/components/landing/LandingChat";
+
+const LandingScene3D = lazy(() => import("@/components/landing/LandingScene3D"));
+
+function Scene3DLayer() {
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+  if (!mounted) return null;
+  return (
+    <div className="pointer-events-none absolute inset-0">
+      <Suspense fallback={null}>
+        <LandingScene3D />
+      </Suspense>
+    </div>
+  );
+}
+
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -42,6 +59,19 @@ function Landing() {
           backgroundSize: "56px 56px",
         }}
       />
+
+      {/* 3D scene */}
+      <Scene3DLayer />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0"
+        style={{
+          background:
+            "radial-gradient(ellipse 70% 60% at 30% 45%, rgba(5,7,13,0.82), rgba(5,7,13,0.35) 55%, transparent 75%)",
+        }}
+      />
+
+
 
       <div className="relative z-10 mx-auto flex min-h-screen max-w-7xl flex-col px-6 py-8">
         {/* Top bar */}
