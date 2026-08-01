@@ -2,6 +2,8 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight } from "lucide-react";
 import { lazy, Suspense, useEffect, useState } from "react";
 import { LandingChat } from "@/components/landing/LandingChat";
+import { Headline3D } from "@/components/landing/Headline3D";
+
 
 const LandingScene3D = lazy(() => import("@/components/landing/LandingScene3D"));
 
@@ -17,6 +19,11 @@ function Scene3DLayer() {
     </div>
   );
 }
+
+
+
+
+
 
 
 export const Route = createFileRoute("/")({
@@ -103,10 +110,8 @@ function Landing() {
               Available for Q3 2026
             </span>
 
-            <h1 className="mt-6 font-serif text-5xl leading-[1.02] tracking-tight text-white sm:text-6xl lg:text-7xl">
-              Production AI,{" "}
-              <span className="italic text-white/80">answered live.</span>
-            </h1>
+            <Headline3D />
+
 
             <p className="mt-6 max-w-xl text-lg leading-relaxed text-white/70">
               A senior AI Architect for LLM, RAG, and multi-agent systems that survive production.
