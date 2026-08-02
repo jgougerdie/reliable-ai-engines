@@ -13,6 +13,8 @@ export const Route = createFileRoute("/portfolio/$slug")({
   },
   head: ({ loaderData }) => {
     const p = loaderData?.project;
+    const SITE_URL = "https://reliable-ai-engines.lovable.app";
+    const pageUrl = p ? `${SITE_URL}/portfolio/${p.slug}` : `${SITE_URL}/portfolio`;
     return {
       meta: [
         { title: p ? `${p.title} — Case Study` : "Case Study" },
@@ -20,10 +22,28 @@ export const Route = createFileRoute("/portfolio/$slug")({
         { property: "og:title", content: p?.title ?? "" },
         { property: "og:description", content: p?.summary ?? "" },
         { property: "og:type", content: "article" },
-        { property: "og:url", content: p ? `/portfolio/${p.slug}` : "/portfolio" },
+        { property: "og:url", content: pageUrl },
         { property: "og:image", content: p?.image ?? "" },
       ],
-      links: p ? [{ rel: "canonical", href: `/portfolio/${p.slug}` }] : [],
+      links: p ? [{ rel: "canonical", href: pageUrl }] : [],
+      scripts: p
+        ? [
+            {
+              type: "application/ld+json",
+              children: JSON.stringify({
+                "@context": "https://schema.org",
+                "@type": "Article",
+                headline: p.title,
+                description: p.summary,
+                image: p.image,
+                url: pageUrl,
+                author: { "@type": "Organization", name: "Architect.systems" },
+                publisher: { "@type": "Organization", name: "Architect.systems" },
+                mainEntityOfPage: { "@type": "WebPage", "@id": pageUrl },
+              }),
+            },
+          ]
+        : [],
     };
   },
   component: ProjectPage,
