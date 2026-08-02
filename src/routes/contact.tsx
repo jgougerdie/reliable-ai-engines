@@ -68,8 +68,9 @@ function Contact() {
               </div>
               <Field label="Company (optional)" name="company" error={errors.company}/>
               <div>
-                <label className="text-sm font-medium">Project</label>
+                <label htmlFor="contact-message" className="text-sm font-medium">Project</label>
                 <textarea
+                  id="contact-message"
                   name="message"
                   rows={6}
                   placeholder="What are you building, and what's the current state?"
@@ -114,8 +115,9 @@ function Contact() {
 function Field({ label, name, type = "text", error }: { label: string; name: string; type?: string; error?: string }) {
   return (
     <div>
-      <label className="text-sm font-medium">{label}</label>
+      <label htmlFor={`contact-${name}`} className="text-sm font-medium">{label}</label>
       <input
+        id={`contact-${name}`}
         name={name}
         type={type}
         className="mt-2 w-full px-3 py-2 rounded-md bg-[var(--surface)] border border-border text-sm placeholder:text-muted-foreground focus:outline-none focus:border-[color:var(--brand)]/60"
