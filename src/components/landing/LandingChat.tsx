@@ -86,7 +86,7 @@ function LandingChatInner() {
       >
         {/* Floating 3D icon overlay */}
         <div
-          className="chat-layer-high animate-float pointer-events-none absolute -right-5 -top-5 z-20 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-[var(--brand)] to-[var(--brand-violet)] shadow-[0_10px_30px_-10px_rgba(106,168,255,0.6),inset_0_2px_4px_rgba(255,255,255,0.3)]"
+          className="chat-layer-high animate-float pointer-events-none absolute -left-5 -top-5 z-20 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-[var(--brand)] to-[var(--brand-violet)] shadow-[0_10px_30px_-10px_rgba(106,168,255,0.6),inset_0_2px_4px_rgba(255,255,255,0.3)]"
         >
           <ArchitectIcon className="h-7 w-7 text-white" />
         </div>
