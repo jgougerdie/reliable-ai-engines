@@ -49,6 +49,7 @@ function ProjectPage() {
 
       <Section
         eyebrow={project.role}
+        titleAs="h1"
         title={project.title}
         description={project.summary}
       >

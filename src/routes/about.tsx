@@ -37,6 +37,7 @@ function About() {
     <>
       <Section
         eyebrow="About"
+        titleAs="h1"
         title={<>Designing AI systems <span className="text-gradient-brand">correctly from the start</span></>}
         description="14+ years building production software and AI systems for teams that need their infrastructure to work — not just demo."
       >

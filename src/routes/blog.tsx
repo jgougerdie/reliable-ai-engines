@@ -46,6 +46,7 @@ function BlogIndex() {
   return (
     <Section
       eyebrow="Blog"
+      titleAs="h1"
       title="Field notes on production AI"
       description="Writing on agents, RAG, LLM engineering, and the architecture decisions that make systems hold up at scale."
     >

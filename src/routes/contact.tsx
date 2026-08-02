@@ -46,6 +46,7 @@ function Contact() {
   return (
     <Section
       eyebrow="Contact"
+      titleAs="h1"
       title="Let's design your AI system"
       description="Tell me what you're building. I'll respond with the questions I'd want answered before recommending an approach."
     >
