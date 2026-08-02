@@ -158,4 +158,43 @@
     to { opacity: 1; transform: translateY(0) }
   }
   .animate-fade-up { animation: fade-up .7s ease-out both; }
+
+  /* 3D holographic chat window */
+  @keyframes float-3d {
+    0%, 100% { transform: translateY(0) rotate(0deg) translateZ(0); }
+    50% { transform: translateY(-20px) rotate(10deg) translateZ(50px); }
+  }
+  @keyframes float-3d-delayed {
+    0%, 100% { transform: translateY(0) rotate(0deg) translateZ(0); }
+    50% { transform: translateY(-20px) rotate(-10deg) translateZ(50px); }
+  }
+  .animate-float-3d { animation: float-3d 6s ease-in-out infinite; transform-style: preserve-3d; }
+  .animate-float-3d-delayed { animation: float-3d-delayed 8s ease-in-out infinite reverse; animation-delay: -2s; transform-style: preserve-3d; }
+
+  .chat-card-3d {
+    transform: rotateY(-5deg) rotateX(2deg);
+    transform-style: preserve-3d;
+    transition: transform 0.7s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+  .chat-card-3d:hover { transform: rotateY(0deg) rotateX(0deg); }
+
+  .chat-layer-high { transform: translateZ(40px); }
+  .chat-layer-mid { transform: translateZ(20px); }
+  .chat-layer-low { transform: translateZ(-20px); }
+
+  .text-3d-motion {
+    text-shadow:
+      0 1px 0 rgba(255,255,255,0.08),
+      0 2px 0 rgba(255,255,255,0.06),
+      0 3px 0 rgba(255,255,255,0.04),
+      0 4px 0 rgba(255,255,255,0.02),
+      0 5px 0 rgba(255,255,255,0.01),
+      0 6px 1px rgba(0,0,0,0.1),
+      0 0 5px rgba(0,0,0,0.1),
+      0 1px 3px rgba(0,0,0,0.3),
+      0 3px 5px rgba(0,0,0,0.2),
+      0 5px 10px rgba(0,0,0,0.25),
+      0 10px 10px rgba(0,0,0,0.2),
+      0 20px 20px rgba(0,0,0,0.15);
+  }
 }
