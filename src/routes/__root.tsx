@@ -80,9 +80,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:title", content: "AI Architect — Production-Grade LLM, RAG & Agent Systems" },
-      { name: "description", content: "This application is a premium AI consultancy website for an AI Architect specializing in production-grade LLM systems, RAG, AI Agents, and workflow automation." },
-      { property: "og:description", content: "This application is a premium AI consultancy website for an AI Architect specializing in production-grade LLM systems, RAG, AI Agents, and workflow automation." },
-      { name: "twitter:description", content: "This application is a premium AI consultancy website for an AI Architect specializing in production-grade LLM systems, RAG, AI Agents, and workflow automation." },
+      { name: "twitter:description", content: "Designing reliable AI systems using LLMs, RAG, agents, and scalable infrastructure." },
       { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/9bcda996-9f26-4a0b-bd3c-14be96828650/id-preview-61768e3c--bbf7eee5-b3b1-44de-9d5c-639ced578f2a.lovable.app-1780130236354.png" },
       { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/9bcda996-9f26-4a0b-bd3c-14be96828650/id-preview-61768e3c--bbf7eee5-b3b1-44de-9d5c-639ced578f2a.lovable.app-1780130236354.png" },
     ],
@@ -94,6 +92,31 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         href: "https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap",
       },
       { rel: "stylesheet", href: appCss },
+    ],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "Organization",
+          name: "Architect.systems",
+          url: SITE_URL,
+          description:
+            "AI architecture consultancy for production-grade LLM systems, RAG pipelines, AI agents, and workflow automation.",
+          sameAs: ["https://github.com/", "https://linkedin.com/", "https://upwork.com/"],
+        }),
+      },
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "WebSite",
+          name: "Architect.systems",
+          url: SITE_URL,
+          description:
+            "Field notes, case studies, and consulting on production-grade LLM, RAG, and agent systems.",
+        }),
+      },
     ],
   }),
   shellComponent: RootShell,
