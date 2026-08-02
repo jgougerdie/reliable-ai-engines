@@ -5,8 +5,8 @@ import { GraduationCap, Award, ArrowRight } from "lucide-react";
 export const Route = createFileRoute("/about")({
   head: () => ({
     meta: [
-      { title: "About — AI Architect with 14+ Years in Software & AI Systems" },
-      { name: "description", content: "AI Architect with 14+ years of software engineering and AI systems experience. Education from Georgia Tech, University of Hamburg, and DeepLearning.AI. AWS ML Specialty certified." },
+      { title: "About — AI Architect | Architect.systems" },
+      { name: "description", content: "AI Architect with 14+ years building production LLM, RAG, and agent systems. AWS Machine Learning Specialty certified." },
       { property: "og:title", content: "About — AI Architect" },
       { property: "og:description", content: "14+ years engineering production software and AI systems." },
       { property: "og:url", content: "/about" },
@@ -37,6 +37,7 @@ function About() {
     <>
       <Section
         eyebrow="About"
+        titleAs="h1"
         title={<>Designing AI systems <span className="text-gradient-brand">correctly from the start</span></>}
         description="14+ years building production software and AI systems for teams that need their infrastructure to work — not just demo."
       >

@@ -1,0 +1,18 @@
+# Architect.systems
+
+> AI architecture consultancy for production-grade LLM systems, RAG pipelines, AI agents, and workflow automation, led by an AI Architect with 14+ years in software and AI systems.
+
+Architect.systems publishes reference architectures, case studies, and field notes on designing AI systems that survive production: deterministic-first pipelines, evaluation-driven development, explicit state, and scalable cloud infrastructure.
+
+## Pages
+
+- [Home](/): Overview of the practice, with a live assistant that answers questions about services and architecture.
+- [Services](/services): Six service areas spanning AI architecture, RAG, agents, and production infrastructure.
+- [Portfolio](/portfolio): Case studies of end-to-end production AI systems.
+- [Blog](/blog): Articles on agents, RAG, LLM engineering, and production AI architecture.
+- [About](/about): Background, education, and certifications of the AI Architect.
+- [Contact](/contact): Start an engagement or book an architecture consultation.
+
+## Optional
+
+- [Story](/story): A 3D scrollytelling walkthrough of the platform.

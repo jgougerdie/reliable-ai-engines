@@ -38,6 +38,7 @@ function Services() {
     <>
       <Section
         eyebrow="Services"
+        titleAs="h1"
         title={<>Production AI, engineered like serious <span className="text-gradient-brand">infrastructure</span></>}
         description="Six focused service areas covering the entire lifecycle of an AI system — from architecture to ongoing optimization."
       >

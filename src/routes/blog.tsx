@@ -46,6 +46,7 @@ function BlogIndex() {
   return (
     <Section
       eyebrow="Blog"
+      titleAs="h1"
       title="Field notes on production AI"
       description="Writing on agents, RAG, LLM engineering, and the architecture decisions that make systems hold up at scale."
     >
@@ -84,6 +85,7 @@ function BlogIndex() {
           <input
             value={query}
             onChange={(e) => { setQuery(e.target.value); setPage(1); }}
+            aria-label="Search articles"
             placeholder="Search articles…"
             className="w-full pl-9 pr-3 py-2 rounded-md bg-[var(--surface)] border border-border text-sm placeholder:text-muted-foreground focus:outline-none focus:border-[color:var(--brand)]/60"
           />

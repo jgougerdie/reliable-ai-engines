@@ -3,7 +3,7 @@ import type {} from "@tanstack/react-start";
 import { projects } from "@/data/projects";
 import { posts } from "@/data/blog";
 
-const BASE_URL = "";
+const BASE_URL = "https://reliable-ai-engines.lovable.app";
 
 export const Route = createFileRoute("/sitemap.xml")({
   server: {

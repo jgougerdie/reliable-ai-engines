@@ -25,6 +25,7 @@ function PortfolioLayout() {
   return (
     <Section
       eyebrow="Portfolio"
+      titleAs="h1"
       title="Production AI systems, end-to-end"
       description="Each engagement combines architecture, implementation, and rigorous evaluation — not throwaway prototypes."
     >
