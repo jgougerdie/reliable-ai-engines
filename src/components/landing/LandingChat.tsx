@@ -1,8 +1,30 @@
+"use client";
+
 import { useChat } from "@ai-sdk/react";
 import { DefaultChatTransport, type UIMessage } from "ai";
-import { useEffect, useRef, useState } from "react";
-import ReactMarkdown from "react-markdown";
-import { Send, Sparkles } from "lucide-react";
+import { Send } from "lucide-react";
+import { useEffect, useRef } from "react";
+
+import {
+  Conversation,
+  ConversationContent,
+  ConversationEmptyState,
+} from "@/components/ai-elements/conversation";
+import {
+  Message,
+  MessageContent,
+  MessageResponse,
+} from "@/components/ai-elements/message";
+import {
+  PromptInput,
+  PromptInputFooter,
+  PromptInputProvider,
+  PromptInputSubmit,
+  PromptInputTextarea,
+  usePromptInputController,
+} from "@/components/ai-elements/prompt-input";
+import { Shimmer } from "@/components/ai-elements/shimmer";
+import { cn } from "@/lib/utils";
 
 const SUGGESTED = [
   "What services do you offer?",
@@ -12,122 +34,188 @@ const SUGGESTED = [
 ];
 
 export function LandingChat() {
-  const [input, setInput] = useState("");
-  const transport = useRef(new DefaultChatTransport({ api: "/api/chat" })).current;
+  return (
+    <PromptInputProvider>
+      <LandingChatInner />
+    </PromptInputProvider>
+  );
+}
 
+function LandingChatInner() {
+  const transport = useRef(new DefaultChatTransport({ api: "/api/chat" })).current;
   const { messages, sendMessage, status, error } = useChat({
     id: "landing-chat",
     transport,
   });
-
-  const scrollRef = useRef<HTMLDivElement>(null);
-  const inputRef = useRef<HTMLTextAreaElement>(null);
-
-  useEffect(() => {
-    scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
-  }, [messages, status]);
-
-  useEffect(() => {
-    if (status === "ready") inputRef.current?.focus();
-  }, [status]);
+  const controller = usePromptInputController();
 
   const busy = status === "submitted" || status === "streaming";
+  const canSubmit = controller.textInput.value.trim().length > 0 && !busy;
 
-  async function submit(text: string) {
+  async function handleSubmit({ text }: { text: string }) {
     const t = text.trim();
     if (!t || busy) return;
-    setInput("");
     await sendMessage({ text: t });
   }
 
+  function submit(text: string) {
+    const t = text.trim();
+    if (!t || busy) return;
+    controller.textInput.clear();
+    sendMessage({ text: t });
+  }
+
   return (
-    <div className="relative flex h-[560px] w-full max-w-2xl flex-col overflow-hidden rounded-2xl border border-white/10 bg-white/[0.03] shadow-[0_20px_80px_-20px_rgba(106,168,255,0.35)] backdrop-blur-xl">
-      {/* Header */}
-      <div className="flex items-center justify-between border-b border-white/10 px-5 py-3">
-        <div className="flex items-center gap-2.5">
-          <span className="relative inline-flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-[var(--brand)] to-[var(--brand-violet)]">
-            <Sparkles className="h-4 w-4 text-white" />
-            <span className="absolute -bottom-0.5 -right-0.5 h-2.5 w-2.5 rounded-full bg-emerald-400 ring-2 ring-[#05070d]" />
-          </span>
-          <div className="leading-tight">
-            <p className="text-sm font-medium text-white">Ask the Architect</p>
-            <p className="text-[11px] text-white/50">On-site AI · services & case studies</p>
-          </div>
-        </div>
-        <span className="hidden text-[10px] uppercase tracking-[0.25em] text-white/40 sm:block">
-          Live
-        </span>
-      </div>
+    <div className="relative w-full max-w-xl" style={{ perspective: "1200px" }}>
+      {/* Background 3D motion objects */}
+      <div
+        aria-hidden
+        className="animate-float-3d pointer-events-none absolute -left-8 top-1/4 h-32 w-32 rounded-full bg-[var(--brand)]/15 blur-3xl"
+      />
+      <div
+        aria-hidden
+        className="animate-float-3d-delayed pointer-events-none absolute -right-12 bottom-1/4 h-48 w-48 rounded-full bg-[var(--brand-violet)]/10 blur-[80px]"
+      />
 
-      {/* Transcript */}
-      <div ref={scrollRef} className="flex-1 overflow-y-auto px-5 py-5">
-        {messages.length === 0 ? (
-          <EmptyState onPick={submit} />
-        ) : (
-          <div className="flex flex-col gap-4">
-            {messages.map((m) => (
-              <MessageBubble key={m.id} message={m} />
-            ))}
-            {status === "submitted" && <TypingIndicator />}
-          </div>
+      {/* 3D holographic card */}
+      <div
+        className={cn(
+          "chat-card-3d relative flex h-[560px] w-full flex-col overflow-hidden rounded-3xl border border-white/10 bg-white/[0.04] shadow-[0_20px_80px_-20px_rgba(106,168,255,0.35)] backdrop-blur-2xl",
+          "before:pointer-events-none before:absolute before:inset-0 before:bg-gradient-to-tr before:from-white/[0.02] before:to-white/[0.08]"
         )}
-        {error && (
-          <div className="mt-4 rounded-md border border-red-500/30 bg-red-500/10 px-3 py-2 text-xs text-red-200">
-            {error.message.includes("402")
-              ? "AI credits are exhausted — please try again later."
-              : error.message.includes("429")
-                ? "Rate limit hit. Give it a moment and try again."
-                : "Something went wrong. Try again."}
-          </div>
-        )}
-      </div>
-
-      {/* Composer */}
-      <form
-        onSubmit={(e) => {
-          e.preventDefault();
-          submit(input);
-        }}
-        className="border-t border-white/10 bg-black/20 p-3"
       >
-        <div className="flex items-end gap-2">
-          <textarea
-            ref={inputRef}
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === "Enter" && !e.shiftKey) {
-                e.preventDefault();
-                submit(input);
-              }
-            }}
-            placeholder="Ask about services, case studies, or engagement…"
-            rows={1}
-            className="min-h-[42px] max-h-32 flex-1 resize-none rounded-lg border border-white/10 bg-white/5 px-3 py-2.5 text-sm text-white placeholder:text-white/35 focus:border-[var(--brand)]/50 focus:outline-none focus:ring-1 focus:ring-[var(--brand)]/40"
-          />
-          <button
-            type="submit"
-            disabled={busy || !input.trim()}
-            className="inline-flex h-[42px] w-[42px] shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-[var(--brand)] to-[var(--brand-violet)] text-white shadow-lg transition disabled:cursor-not-allowed disabled:opacity-40 hover:opacity-90"
-            aria-label="Send"
-          >
-            <Send className="h-4 w-4" />
-          </button>
+        {/* Floating 3D icon overlay */}
+        <div
+          className="chat-layer-high animate-float pointer-events-none absolute -right-5 -top-5 z-20 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-[var(--brand)] to-[var(--brand-violet)] shadow-[0_10px_30px_-10px_rgba(106,168,255,0.6),inset_0_2px_4px_rgba(255,255,255,0.3)]"
+        >
+          <ArchitectIcon className="h-7 w-7 text-white" />
         </div>
-      </form>
+
+        {/* Header */}
+        <div className="chat-layer-high flex items-center justify-between border-b border-white/10 px-5 py-3">
+          <div className="flex items-center gap-3">
+            <span className="relative inline-flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-[var(--brand)] to-[var(--brand-violet)] shadow-[0_0_20px_-4px_var(--brand)]">
+              <ArchitectIcon className="h-4 w-4 text-white" />
+              <span className="absolute -bottom-0.5 -right-0.5 h-2.5 w-2.5 rounded-full bg-emerald-400 ring-2 ring-[#05070d]" />
+            </span>
+            <div className="leading-tight">
+              <p className="text-3d-motion text-sm font-semibold text-white">
+                Ask the Architect
+              </p>
+              <p className="text-[11px] text-[var(--brand)]/70">On-site AI · services & case studies</p>
+            </div>
+          </div>
+          <span className="hidden text-[10px] uppercase tracking-[0.25em] text-white/40 sm:block">
+            Live
+          </span>
+        </div>
+
+        {/* Conversation */}
+        <Conversation className="flex-1 px-5 py-4">
+          <ConversationContent className="gap-4">
+            {messages.length === 0 ? (
+              <ConversationEmptyState className="h-full">
+                <EmptyState onPick={submit} />
+              </ConversationEmptyState>
+            ) : (
+              messages.map((m) => <ChatMessage key={m.id} message={m} />)
+            )}
+            {busy && (
+              <div className="chat-layer-mid flex items-center gap-3 py-1">
+                <div className="flex gap-1">
+                  <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-white/50 [animation-delay:0ms]" />
+                  <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-white/50 [animation-delay:150ms]" />
+                  <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-white/50 [animation-delay:300ms]" />
+                </div>
+                <Shimmer as="span" className="text-xs text-white/50">
+                  Architect is thinking
+                </Shimmer>
+              </div>
+            )}
+            {error && (
+              <div className="mt-2 rounded-md border border-red-500/30 bg-red-500/10 px-3 py-2 text-xs text-red-200">
+                {error.message.includes("402")
+                  ? "AI credits are exhausted — please try again later."
+                  : error.message.includes("429")
+                    ? "Rate limit hit. Give it a moment and try again."
+                    : "Something went wrong. Try again."}
+              </div>
+            )}
+          </ConversationContent>
+        </Conversation>
+
+        {/* Composer */}
+        <div className="chat-layer-high border-t border-white/10 bg-black/20 p-3">
+          <PromptInput
+            onSubmit={handleSubmit}
+            className="relative"
+          >
+            <div className="absolute -inset-0.5 rounded-xl bg-gradient-to-r from-[var(--brand)] to-[var(--brand-violet)] opacity-20 blur-sm transition-opacity duration-500 group-focus-within/input-group:opacity-40" />
+            <PromptInputTextarea
+              placeholder="Ask about services, case studies, or engagement…"
+              className="relative min-h-[42px] max-h-32 flex-1 resize-none rounded-lg border border-white/10 bg-white/5 px-3 py-2.5 text-sm text-white placeholder:text-white/35 focus:border-[var(--brand)]/50 focus:outline-none focus:ring-1 focus:ring-[var(--brand)]/40"
+            />
+            <PromptInputFooter className="justify-end pt-2">
+              <PromptInputSubmit
+                status={status}
+                disabled={!canSubmit}
+                className="inline-flex h-[42px] w-[42px] shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-[var(--brand)] to-[var(--brand-violet)] text-white shadow-lg transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-40"
+              >
+                <Send className="h-4 w-4" />
+              </PromptInputSubmit>
+            </PromptInputFooter>
+          </PromptInput>
+        </div>
+
+        {/* Bottom inner glow */}
+        <div className="pointer-events-none absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-[var(--brand)]/10 to-transparent rounded-b-3xl" />
+      </div>
+
+      {/* 3D shadow/reflection plane */}
+      <div
+        className="chat-layer-low pointer-events-none absolute -bottom-6 left-1/2 h-4 w-[90%] -translate-x-1/2 rounded-[100%] bg-[var(--brand)]/20 blur-xl"
+      />
     </div>
+  );
+}
+
+function ChatMessage({ message }: { message: UIMessage }) {
+  const text = message.parts
+    .map((p) => (p.type === "text" ? p.text : ""))
+    .join("");
+  const isUser = message.role === "user";
+
+  return (
+    <Message
+      from={message.role}
+      className={cn(
+        "max-w-[95%]",
+        isUser ? "ml-auto items-end" : "items-start"
+      )}
+    >
+      <MessageContent
+        className={cn(
+          "chat-layer-mid text-sm shadow-md",
+          isUser
+            ? "max-w-[85%] bg-gradient-to-br from-[var(--brand)] to-[var(--brand-violet)] px-4 py-2.5 text-white [border:0] rounded-2xl rounded-br-sm"
+            : "max-w-[85%] rounded-2xl rounded-tl-none border border-white/10 bg-white/10 px-4 py-2.5 text-white/90"
+        )}
+      >
+        <MessageResponse>{text}</MessageResponse>
+      </MessageContent>
+    </Message>
   );
 }
 
 function EmptyState({ onPick }: { onPick: (t: string) => void }) {
   return (
     <div className="flex h-full flex-col items-center justify-center text-center">
-      <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-[var(--brand)]/20 to-[var(--brand-violet)]/20 ring-1 ring-white/10">
-        <Sparkles className="h-5 w-5 text-white/70" />
+      <div className="chat-layer-mid mb-4 inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-[var(--brand)]/20 to-[var(--brand-violet)]/20 ring-1 ring-white/10">
+        <ArchitectIcon className="h-5 w-5 text-white/70" />
       </div>
-      <h3 className="text-lg font-medium text-white">How can I help?</h3>
+      <h3 className="text-3d-motion text-lg font-medium text-white">How can I help?</h3>
       <p className="mt-1 max-w-sm text-sm text-white/50">
-        Ask about the services offered or a past project — I'll answer from the real portfolio.
+        Ask about the services offered or a past project — I&apos;ll answer from the real portfolio.
       </p>
       <div className="mt-6 grid w-full max-w-md grid-cols-1 gap-2 sm:grid-cols-2">
         {SUGGESTED.map((s) => (
@@ -144,40 +232,26 @@ function EmptyState({ onPick }: { onPick: (t: string) => void }) {
   );
 }
 
-function MessageBubble({ message }: { message: UIMessage }) {
-  const text = message.parts
-    .map((p) => (p.type === "text" ? p.text : ""))
-    .join("");
-  const isUser = message.role === "user";
-
-  if (isUser) {
-    return (
-      <div className="flex justify-end">
-        <div className="max-w-[85%] rounded-2xl rounded-br-sm bg-gradient-to-br from-[var(--brand)] to-[var(--brand-violet)] px-4 py-2.5 text-sm text-white shadow-md">
-          {text}
-        </div>
-      </div>
-    );
-  }
+function ArchitectIcon({ className }: { className?: string }) {
   return (
-    <div className="flex gap-3">
-      <div className="mt-0.5 h-7 w-7 shrink-0 rounded-lg bg-gradient-to-br from-[var(--brand)]/30 to-[var(--brand-violet)]/30 ring-1 ring-white/10" />
-      <div className="prose prose-invert prose-sm max-w-none flex-1 text-sm text-white/90 [&_a]:text-[var(--brand)] [&_a]:no-underline hover:[&_a]:underline [&_code]:rounded [&_code]:bg-white/10 [&_code]:px-1 [&_code]:py-0.5 [&_code]:text-[0.85em] [&_p]:my-2 [&_ul]:my-2 [&_li]:my-0.5">
-        <ReactMarkdown>{text || "…"}</ReactMarkdown>
-      </div>
-    </div>
-  );
-}
-
-function TypingIndicator() {
-  return (
-    <div className="flex gap-3">
-      <div className="mt-0.5 h-7 w-7 shrink-0 rounded-lg bg-gradient-to-br from-[var(--brand)]/30 to-[var(--brand-violet)]/30 ring-1 ring-white/10" />
-      <div className="flex items-center gap-1 pt-2">
-        <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-white/50 [animation-delay:0ms]" />
-        <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-white/50 [animation-delay:150ms]" />
-        <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-white/50 [animation-delay:300ms]" />
-      </div>
-    </div>
+    <svg
+      className={className}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M12 3v18" />
+      <path d="M4 7h16" />
+      <path d="M6 12h12" />
+      <path d="M8 17h8" />
+      <circle cx="12" cy="7" r="2" />
+      <circle cx="8" cy="12" r="1.5" />
+      <circle cx="16" cy="12" r="1.5" />
+      <circle cx="10" cy="17" r="1" />
+      <circle cx="14" cy="17" r="1" />
+    </svg>
   );
 }
