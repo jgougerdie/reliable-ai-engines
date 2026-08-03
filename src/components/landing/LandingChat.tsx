@@ -77,13 +77,15 @@ function LandingChatInner() {
         className="animate-float-3d-delayed pointer-events-none absolute -right-12 bottom-1/4 h-48 w-48 rounded-full bg-[var(--brand-violet)]/10 blur-[80px]"
       />
 
-      {/* 3D holographic card */}
-      <div
-        className={cn(
-          "chat-card-3d relative flex h-[560px] w-full flex-col overflow-hidden rounded-3xl border border-white/10 bg-white/[0.04] shadow-[0_20px_80px_-20px_rgba(106,168,255,0.35)] backdrop-blur-2xl",
-          "before:pointer-events-none before:absolute before:inset-0 before:bg-gradient-to-tr before:from-white/[0.02] before:to-white/[0.08]"
-        )}
-      >
+      {/* Animated gradient border wrapper */}
+      <div className="animated-gradient-border animate-breathe-glow p-[1.5px]">
+        {/* 3D holographic card */}
+        <div
+          className={cn(
+            "chat-card-3d relative flex h-[560px] w-full flex-col overflow-hidden rounded-3xl border border-white/10 bg-white/[0.04] shadow-[0_20px_80px_-20px_rgba(106,168,255,0.35)] backdrop-blur-2xl",
+            "before:pointer-events-none before:absolute before:inset-0 before:bg-gradient-to-tr before:from-white/[0.02] before:to-white/[0.08]"
+          )}
+        >
         {/* Floating 3D icon overlay */}
         <div
           className="chat-layer-high animate-float pointer-events-none absolute -left-5 -top-5 z-20 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-[var(--brand)] to-[var(--brand-violet)] shadow-[0_10px_30px_-10px_rgba(106,168,255,0.6),inset_0_2px_4px_rgba(255,255,255,0.3)]"
@@ -169,6 +171,7 @@ function LandingChatInner() {
 
         {/* Bottom inner glow */}
         <div className="pointer-events-none absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-[var(--brand)]/10 to-transparent rounded-b-3xl" />
+      </div>
       </div>
 
       {/* 3D shadow/reflection plane */}
