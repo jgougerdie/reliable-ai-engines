@@ -35,11 +35,224 @@ import coverDeterministic from "@/assets/blog-deterministic-first.jpg";
 import diagramStages from "@/assets/blog-production-ai-stages.png";
 import coverRagArchitecture from "@/assets/blog-llm-rag-architecture-cover.jpg";
 import diagramRagArchitecture from "@/assets/blog-llm-rag-architecture-diagram.png";
+import coverGovernance from "@/assets/blog-ai-governance-enterprise.jpg";
 
 // Posts are ordered to flow:
 //   Foundations → Systems → Implementation → Proof
 // Sort is by date desc, so the dates below encode that buyer journey.
 export const posts: BlogPost[] = [
+  // ──────────────────────────────────────────────────────────
+  // GOVERNANCE & ENTERPRISE
+  // ──────────────────────────────────────────────────────────
+  {
+    slug: "building-enterprise-ai-governance-compliance",
+    title: "Building Enterprise AI: A Guide to Governance and Compliance",
+    excerpt:
+      "Governance is not a checklist you fill in after launch. It is the operating system that keeps production RAG and agent systems safe, auditable, and cost-controlled at scale.",
+    category: "AI Architecture",
+    tags: ["Governance", "Compliance", "Observability", "Safety", "Cost Control", "Enterprise AI"],
+    date: "2026-08-03",
+    readingMinutes: 11,
+    featured: true,
+    cover: coverGovernance,
+    content: `Most enterprise AI initiatives fail the same audit: the model works, but nobody can explain why it made a specific decision, who authorized the action, or what it cost. Governance is treated as a procurement slide deck instead of an engineering discipline — and that is why production systems drift into risk, cost, and regulatory exposure.
+
+> Governance is not a checklist you fill in after launch. It is the operating system that keeps a production AI system safe, auditable, and cost-controlled when nobody is watching.
+
+This guide covers the technical implementation of governance for RAG and agent systems: observability, safety rails, and cost controls. These are the layers that turn a promising prototype into something a CIO can sign off on.
+
+## The Governance Gap
+
+The typical production AI stack has three blind spots:
+
+- **No decision trace.** A user asks a question, the system answers, and the intermediate reasoning is lost. When the answer is wrong, there is no chain of evidence.
+- **No authority boundary.** An agent can query a database, send an email, or update a record without a clear approval model. The LLM has more power than any human operator.
+- **No cost accountability.** Token spend is invisible until the monthly bill arrives. One inefficient retrieval path can consume the majority of the budget.
+
+These are not compliance problems in isolation. They are operational problems that become compliance problems the moment a regulator, customer, or board asks a question.
+
+## Governance as Architecture
+
+Good governance is built into the system, not wrapped around it. It has three technical pillars:
+
+1. **Observability** — every decision is traceable, every retrieval is logged, every cost is attributed.
+2. **Safety rails** — boundaries, approvals, and fallbacks prevent the model from doing things it should not do.
+3. **Cost controls** — usage is metered, routed, and capped before it becomes a budget surprise.
+
+Each pillar is implemented as a layer in the architecture. Skip one, and the others become ineffective.
+
+## 1. Observability: Trust Through Evidence
+
+You cannot govern what you cannot see. A production RAG or agent system must emit structured telemetry at every stage.
+
+### What to trace
+
+- **Request context** — user ID, session ID, tenant, permissions, timestamp
+- **Retrieval trace** — which chunks were retrieved, from which sources, with what scores
+- **Model invocation** — model name, prompt version, input/output tokens, latency, cost
+- **Decision log** — why a particular path was taken, which rules fired, which tools were called
+- **Outcome signal** — user feedback, downstream validation, error classification
+
+### Implementation pattern
+
+Use OpenTelemetry or a structured event stream. Every significant operation emits a span. The spans compose into a trace that can be replayed later.
+
+\`\`\`python
+@trace(span_type="retrieval")
+def retrieve(query: str, tenant: str, user_id: str) -> RetrievedChunks:
+    chunks = index.search(query, filter={"tenant": tenant})
+    emit_event("retrieval", {
+        "tenant": tenant,
+        "user_id": user_id,
+        "query": query,
+        "chunks": [c.id for c in chunks],
+        "scores": [c.score for c in chunks],
+    })
+    return chunks
+\`\`\`
+
+The goal is not just logs. It is a **decision record** that can be audited, replayed, and used to train the next version of the system.
+
+### RAG-specific observability
+
+In RAG systems, the highest-leverage telemetry is the **retrieval-to-generation trace**. When the model hallucinates, the first question should be: "What did it actually retrieve?" If the retrieved chunks are wrong, the fix is retrieval, not prompting. If the chunks are right and the answer is wrong, the fix is generation or validation.
+
+:::callout info|Retrieval Trace Rule
+Every generated answer must be linkable to the exact set of retrieved chunks that influenced it. If you cannot draw that line, you do not have a RAG system; you have a chatbot with a search engine attached.
+:::
+
+## 2. Safety Rails: Boundaries, Not Hopes
+
+An LLM is a reasoning component, not an operator. It should not have direct access to destructive actions, sensitive data, or unbounded loops.
+
+### The four safety layers
+
+1. **Input guardrails** — validate and sanitize user input before it reaches the model. Block prompt injection, jailbreak attempts, and out-of-scope requests.
+2. **Output guardrails** — schema-validate every model output. Reject answers that violate format, policy, or factual constraints.
+3. **Tool guardrails** — every tool the agent can call must be explicitly declared, scoped, and rate-limited. No open-ended API access.
+4. **Escalation guardrails** — when confidence is low or a rule is violated, the system must route to a human, not guess.
+
+### Implementation pattern
+
+Use a policy engine that runs before and after the model. The engine is deterministic code; the model is a reasoning component inside the boundary.
+
+\`\`\`python
+class PolicyEngine:
+    def check_input(self, request: Request) -> Result:
+        if self.detect_prompt_injection(request.text):
+            return Result.block(reason="prompt_injection_detected")
+        if not self.scope_allowed(request.user, request.intent):
+            return Result.block(reason="out_of_scope")
+        return Result.allow()
+
+    def check_output(self, response: Response, context: Context) -> Result:
+        if not schema.validate(response):
+            return Result.retry(reason="schema_violation")
+        if self.policy.violates(response, context):
+            return Result.escalate(reason="policy_violation")
+        return Result.allow()
+\`\`\`
+
+### Agent-specific safety
+
+Agents are particularly dangerous because they combine reasoning with action. The safest agent design follows two rules:
+
+- **Bounded tools.** The agent can only call a small, reviewed set of tools. Each tool has a narrow contract.
+- **Human-in-the-loop for high-stakes actions.** Any action that affects money, customer data, or external commitments requires explicit approval.
+
+:::callout warn|Agent Authority Principle
+Never give an agent the same authority you would not give to a junior employee operating alone at 3am. If the action is irreversible, a human approves it.
+:::
+
+## 3. Cost Controls: Meter Before You Optimize
+
+Cost governance starts with visibility. You cannot optimize what you have not measured.
+
+### What to meter
+
+- **Per-request cost** — input/output tokens, model tier, embedding cost, retrieval cost
+- **Per-tenant cost** — cost attribution for multi-tenant systems
+- **Per-feature cost** — which product features drive the most LLM spend
+- **Per-path cost** — which decision branches are expensive and why
+
+### Cost-control mechanisms
+
+- **Model routing.** Use the cheapest model that passes eval for each task. Reserve frontier models for the hard minority of cases.
+- **Caching.** Cache embeddings, retrieval results, and deterministic completions. Many enterprise queries are repeated.
+- **Budget caps.** Enforce per-user, per-tenant, and per-request token limits. Fail open to a cheaper fallback, not to an unbounded call.
+- **Distillation.** For high-volume tasks, fine-tune a smaller model on successful frontier-model outputs.
+
+\`\`\`python
+@trace(span_type="generation")
+def generate(prompt: Prompt, context: Context) -> Response:
+    budget = budget_for(context.tenant, context.feature)
+    if budget.remaining < estimated_cost(prompt):
+        return fallback_response(prompt, context)
+
+    model = router.select(prompt, context)
+    response = model.invoke(prompt)
+    budget.record(response.cost)
+    return response
+\`\`\`
+
+### RAG cost levers
+
+RAG systems have specific cost patterns:
+
+- **Embedding volume** — indexing every document is expensive; incremental updates and chunking strategy matter.
+- **Retrieval depth** — retrieving 20 chunks and reranking them costs more than retrieving 5. The right number is an eval question, not a default.
+- **Context window usage** — stuffing retrieved chunks into a long context is the fastest way to inflate token cost. Summarization and compression layers pay for themselves.
+
+## Compliance by Design
+
+Regulatory frameworks like the EU AI Act, SOC 2, and emerging sector rules are converging on a few practical requirements:
+
+- **Transparency** — explain how the system arrives at decisions
+- **Human oversight** — maintain meaningful human control over high-risk decisions
+- **Accuracy** — ensure outputs are correct enough for their intended purpose
+- **Security** — protect data and prevent unauthorized manipulation
+- **Logging** — retain auditable records of operation
+
+These map directly onto the three pillars above. A system built with observability, safety rails, and cost controls is already most of the way to compliance.
+
+## Implementation Roadmap
+
+Governance is not a one-time project. It is layered in over time:
+
+\`\`\`mermaid
+graph LR
+    A[Baseline telemetry] --> B[Decision traces]
+    B --> C[Input/output guardrails]
+    C --> D[Tool scoping + approvals]
+    D --> E[Cost attribution + caps]
+    E --> F[Policy engine + audit reports]
+    F --> G[Continuous compliance monitoring]
+\`\`\`
+
+Start with telemetry. Once you can see the system, add guardrails. Once guardrails are in place, add cost controls. The final layer is continuous monitoring that proves governance is working.
+
+## Common Mistakes
+
+- **Buying a governance tool before building observability.** Tools need data; data comes from instrumentation.
+- **Treating guardrails as prompt engineering.** Safety boundaries should be deterministic code, not polite instructions to the model.
+- **Ignoring cost until the bill shocks the CFO.** Cost controls are part of reliability, not a post-launch optimization.
+- **Building for compliance instead of operations.** The best compliance posture is a well-operated system; the paperwork is just evidence.
+
+## Key Takeaways
+
+- Governance is an engineering discipline, not a legal review.
+- Observability creates the evidence needed for trust, debugging, and compliance.
+- Safety rails are deterministic boundaries around the model's reasoning.
+- Cost controls prevent the system from becoming a budget risk.
+- A governable system is also a maintainable, scalable, and auditable system.
+
+The enterprises that win with AI will not be the ones with the most impressive demos. They will be the ones whose systems can be operated safely, explained clearly, and improved continuously.
+
+:::callout info|Enterprise AI Governance Consulting
+If you are moving a RAG or agent system into production and need governance architecture, observability instrumentation, safety rails, or cost controls designed and implemented, I can help. I work with teams to build production-grade AI systems that pass security review, audit, and scale. Reach out through the contact form or hire me on Upwork to discuss your governance requirements.
+:::`
+  },
+
   // ──────────────────────────────────────────────────────────
   // FOUNDATIONS
   // ──────────────────────────────────────────────────────────
