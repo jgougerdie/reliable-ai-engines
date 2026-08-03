@@ -22,7 +22,7 @@ export function Headline3D() {
     <div className="mt-6 animate-float [perspective:1000px]">
       <h1
         ref={ref}
-        className="relative font-serif text-5xl leading-[1.02] tracking-tight text-white transition-transform duration-300 ease-out will-change-transform sm:text-6xl lg:text-7xl"
+        className="relative font-serif text-5xl leading-[1.02] tracking-tight transition-transform duration-300 ease-out will-change-transform sm:text-6xl lg:text-7xl"
         style={{
           transform: `rotateX(${t.rx}deg) rotateY(${t.ry}deg)`,
           transformStyle: "preserve-3d",
@@ -36,10 +36,13 @@ export function Headline3D() {
         >
           Production AI, <span className="italic">answered live.</span>
         </span>
-        <span className="relative block" style={{ transform: "translateZ(32px)" }}>
+        <span
+          className="animate-text-shimmer relative block"
+          style={{ transform: "translateZ(32px)" }}
+        >
           Production AI,{" "}
           <span
-            className="italic text-white/85"
+            className="italic"
             style={{ transform: "translateZ(25px)", display: "inline-block" }}
           >
             answered live.
