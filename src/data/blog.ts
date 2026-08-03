@@ -35,6 +35,7 @@ import coverDeterministic from "@/assets/blog-deterministic-first.jpg";
 import diagramStages from "@/assets/blog-production-ai-stages.png";
 import coverRagArchitecture from "@/assets/blog-llm-rag-architecture-cover.jpg";
 import diagramRagArchitecture from "@/assets/blog-llm-rag-architecture-diagram.png";
+import coverGovernance from "@/assets/blog-ai-governance-enterprise.jpg";
 
 // Posts are ordered to flow:
 //   Foundations → Systems → Implementation → Proof
