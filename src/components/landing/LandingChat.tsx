@@ -172,6 +172,7 @@ function LandingChatInner() {
         {/* Bottom inner glow */}
         <div className="pointer-events-none absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-[var(--brand)]/10 to-transparent rounded-b-3xl" />
       </div>
+      </div>
 
       {/* 3D shadow/reflection plane */}
       <div
