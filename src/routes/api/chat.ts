@@ -2,6 +2,44 @@ import { createLovableAiGatewayProvider } from "@/lib/ai-gateway.server";
 import { createFileRoute } from "@tanstack/react-router";
 import { convertToModelMessages, streamText, type UIMessage } from "ai";
 import { projects } from "@/data/projects";
+import { createClient } from "@supabase/supabase-js";
+
+type VideoKnowledge = {
+  title: string;
+  description: string | null;
+  tags: string[] | null;
+  transcript: string | null;
+};
+
+async function loadVideoKnowledge(): Promise<string> {
+  const url = process.env['SUPABASE_URL'];
+  const key = process.env['SUPABASE_PUBLISHABLE_KEY'];
+  if (!url || !key) return "";
+  try {
+    const client = createClient(url, key, {
+      auth: { persistSession: false, autoRefreshToken: false },
+    });
+    const { data, error } = await client
+      .from("videos")
+      .select("title, description, tags, transcript")
+      .eq("ai_shared", true)
+      .order("created_at", { ascending: false })
+      .limit(30);
+    if (error || !data?.length) return "";
+    return (data as VideoKnowledge[])
+      .map((v) => {
+        const tags = v.tags?.length ? `\n   Tags: ${v.tags.join(", ")}` : "";
+        const desc = v.description ? `\n   Summary: ${v.description}` : "";
+        const tx = v.transcript
+          ? `\n   Transcript: ${v.transcript.slice(0, 6000)}`
+          : "\n   Transcript: (none provided)";
+        return `• Video: ${v.title}${desc}${tags}${tx}`;
+      })
+      .join("\n\n");
+  } catch {
+    return "";
+  }
+}
 
 const SERVICES = [
   { title: "AI Architecture", desc: "End-to-end system design for production LLM, RAG, and agent platforms." },
@@ -17,7 +55,7 @@ const ENGAGEMENT = `Engagement model:
 - Available via Upwork or direct contract. Typical projects run 4–12 weeks.
 - I lead architecture and implementation personally; not an agency.`;
 
-function systemPrompt() {
+function systemPrompt(videoKnowledge: string) {
   const services = SERVICES.map((s) => `- ${s.title}: ${s.desc}`).join("\n");
   const portfolio = projects
     .map(
@@ -47,7 +85,11 @@ ${ENGAGEMENT}
 
 ## PORTFOLIO / CASE STUDIES
 ${portfolio}
-`;
+${
+  videoKnowledge
+    ? `\n## VIDEO LIBRARY (talks, demos, walkthroughs — answer from these transcripts when relevant and name the video)\n${videoKnowledge}\n`
+    : ""
+}`;
 }
 
 type ChatRequestBody = { messages?: unknown };
@@ -66,7 +108,7 @@ export const Route = createFileRoute("/api/chat")({
         const gateway = createLovableAiGatewayProvider(key);
         const result = streamText({
           model: gateway("google/gemini-3.5-flash"),
-          system: systemPrompt(),
+          system: systemPrompt(await loadVideoKnowledge()),
           messages: await convertToModelMessages(messages as UIMessage[]),
         });
 
