@@ -26,8 +26,10 @@ import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
 import { Route as ApiChatRouteImport } from './routes/api/chat'
 import { Route as Char91DotwellKnownChar93OauthProtectedResourceRouteImport } from './routes/[.well-known]/oauth-protected-resource'
 import { Route as Char91DotmcpChar93ListToolsRouteImport } from './routes/[.mcp]/list-tools'
+import { Route as ApiPublicVideosRouteImport } from './routes/api/public/videos'
 import { Route as Char91DotmcpChar93InvokeToolToolRouteImport } from './routes/[.mcp]/invoke-tool/$tool'
 import { Route as DotlovableOauthConsentRouteImport } from './routes/[.]lovable.oauth.consent'
+import { Route as ApiPublicVideosIdRouteImport } from './routes/api/public/videos.$id'
 
 const VideosRoute = VideosRouteImport.update({
   id: '/videos',
@@ -116,6 +118,11 @@ const Char91DotmcpChar93ListToolsRoute =
     path: '/.mcp/list-tools',
     getParentRoute: () => rootRouteImport,
   } as any)
+const ApiPublicVideosRoute = ApiPublicVideosRouteImport.update({
+  id: '/api/public/videos',
+  path: '/api/public/videos',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const Char91DotmcpChar93InvokeToolToolRoute =
   Char91DotmcpChar93InvokeToolToolRouteImport.update({
     id: '/.mcp/invoke-tool/$tool',
@@ -126,6 +133,11 @@ const DotlovableOauthConsentRoute = DotlovableOauthConsentRouteImport.update({
   id: '/.lovable/oauth/consent',
   path: '/.lovable/oauth/consent',
   getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicVideosIdRoute = ApiPublicVideosIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => ApiPublicVideosRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
@@ -148,6 +160,8 @@ export interface FileRoutesByFullPath {
   '/portfolio/$slug': typeof PortfolioSlugRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
+  '/api/public/videos': typeof ApiPublicVideosRouteWithChildren
+  '/api/public/videos/$id': typeof ApiPublicVideosIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -169,6 +183,8 @@ export interface FileRoutesByTo {
   '/portfolio/$slug': typeof PortfolioSlugRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
+  '/api/public/videos': typeof ApiPublicVideosRouteWithChildren
+  '/api/public/videos/$id': typeof ApiPublicVideosIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -191,6 +207,8 @@ export interface FileRoutesById {
   '/portfolio/$slug': typeof PortfolioSlugRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
+  '/api/public/videos': typeof ApiPublicVideosRouteWithChildren
+  '/api/public/videos/$id': typeof ApiPublicVideosIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -214,6 +232,8 @@ export interface FileRouteTypes {
     | '/portfolio/$slug'
     | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
+    | '/api/public/videos'
+    | '/api/public/videos/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -235,6 +255,8 @@ export interface FileRouteTypes {
     | '/portfolio/$slug'
     | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
+    | '/api/public/videos'
+    | '/api/public/videos/$id'
   id:
     | '__root__'
     | '/'
@@ -256,6 +278,8 @@ export interface FileRouteTypes {
     | '/portfolio/$slug'
     | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
+    | '/api/public/videos'
+    | '/api/public/videos/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -276,6 +300,7 @@ export interface RootRouteChildren {
   ApiChatRoute: typeof ApiChatRoute
   DotlovableOauthConsentRoute: typeof DotlovableOauthConsentRoute
   Char91DotmcpChar93InvokeToolToolRoute: typeof Char91DotmcpChar93InvokeToolToolRoute
+  ApiPublicVideosRoute: typeof ApiPublicVideosRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
@@ -399,6 +424,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof Char91DotmcpChar93ListToolsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/videos': {
+      id: '/api/public/videos'
+      path: '/api/public/videos'
+      fullPath: '/api/public/videos'
+      preLoaderRoute: typeof ApiPublicVideosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/.mcp/invoke-tool/$tool': {
       id: '/.mcp/invoke-tool/$tool'
       path: '/.mcp/invoke-tool/$tool'
@@ -412,6 +444,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/.lovable/oauth/consent'
       preLoaderRoute: typeof DotlovableOauthConsentRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/api/public/videos/$id': {
+      id: '/api/public/videos/$id'
+      path: '/$id'
+      fullPath: '/api/public/videos/$id'
+      preLoaderRoute: typeof ApiPublicVideosIdRouteImport
+      parentRoute: typeof ApiPublicVideosRoute
     }
   }
 }
@@ -438,6 +477,18 @@ const PortfolioRouteWithChildren = PortfolioRoute._addFileChildren(
   PortfolioRouteChildren,
 )
 
+interface ApiPublicVideosRouteChildren {
+  ApiPublicVideosIdRoute: typeof ApiPublicVideosIdRoute
+}
+
+const ApiPublicVideosRouteChildren: ApiPublicVideosRouteChildren = {
+  ApiPublicVideosIdRoute: ApiPublicVideosIdRoute,
+}
+
+const ApiPublicVideosRouteWithChildren = ApiPublicVideosRoute._addFileChildren(
+  ApiPublicVideosRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
@@ -457,6 +508,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiChatRoute: ApiChatRoute,
   DotlovableOauthConsentRoute: DotlovableOauthConsentRoute,
   Char91DotmcpChar93InvokeToolToolRoute: Char91DotmcpChar93InvokeToolToolRoute,
+  ApiPublicVideosRoute: ApiPublicVideosRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
