@@ -1,164 +1,287 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowRight } from "lucide-react";
-import { lazy, Suspense, useEffect, useState } from "react";
-import { LandingChat } from "@/components/landing/LandingChat";
-import { Headline3D } from "@/components/landing/Headline3D";
-
-
-const LandingScene3D = lazy(() => import("@/components/landing/LandingScene3D"));
-
-function Scene3DLayer() {
-  const [mounted, setMounted] = useState(false);
-  useEffect(() => setMounted(true), []);
-  if (!mounted) return null;
-  return (
-    <div className="pointer-events-none absolute inset-0">
-      <Suspense fallback={null}>
-        <LandingScene3D />
-      </Suspense>
-    </div>
-  );
-}
-
-
-
-
-
-
+import { useState } from "react";
+import { ArrowRight, ArrowUpRight, Play, Youtube } from "lucide-react";
+import { VideoCard } from "@/components/work/VideoCard";
+import { VideoLightbox } from "@/components/work/VideoLightbox";
+import {
+  featuredProjects,
+  showreel,
+  posterFor,
+  YOUTUBE_CHANNEL_URL,
+  videoProjects,
+  type VideoProject,
+} from "@/data/videoProjects";
 
 export const Route = createFileRoute("/")({
-  head: () => ({
-    meta: [
-      { title: "Architect.systems — Production AI, Answered Live" },
-      {
-        name: "description",
-        content:
-          "The consulting practice of a senior AI Architect. Ask the on-site assistant about services and case studies, or step inside the full site.",
-      },
-      { property: "og:title", content: "Architect.systems — Production AI, Answered Live" },
-      {
-        property: "og:description",
-        content: "LLM, RAG, and agent systems engineered for production. Talk to the on-site AI or enter the site.",
-      },
-    ],
-  }),
-  component: Landing,
+  head: () => {
+    const poster = posterFor(showreel);
+    return {
+      meta: [
+        { title: "Javad Gougerdie — Video Editor & Post-Production" },
+        {
+          name: "description",
+          content:
+            "Portfolio of Javad Gougerdie: cinematic editing, motion graphics, visual effects and design. Every frame has a purpose.",
+        },
+        { property: "og:title", content: "Javad Gougerdie — Video Editor & Post-Production" },
+        {
+          property: "og:description",
+          content:
+            "Cinematic editing, motion graphics, VFX and design — watch the showreel and selected work.",
+        },
+        { property: "og:type", content: "website" },
+        { name: "twitter:card", content: "summary_large_image" },
+        ...(poster
+          ? [
+              { property: "og:image", content: poster },
+              { name: "twitter:image", content: poster },
+            ]
+          : []),
+      ],
+      links: [{ rel: "canonical", href: "/" }],
+    };
+  },
+  component: Home,
 });
 
-function Landing() {
+const services = [
+  {
+    title: "Cinematic Editing",
+    desc: "Dialogue-led cuts, long-held framing and pacing that keeps the subject — not the edit — in focus.",
+  },
+  {
+    title: "Motion Graphics",
+    desc: "Type, easing and layout choreography built as a repeatable system, not a one-off effect.",
+  },
+  {
+    title: "Visual Effects & Post",
+    desc: "Compositing and post work integrated into live footage so the effect never announces itself.",
+  },
+  {
+    title: "Design",
+    desc: "Swiss-style graphic design translated into motion: grid discipline, type hierarchy, negative space.",
+  },
+];
+
+const processSteps = [
+  { n: "01", title: "Discover", desc: "Brief, references, and the emotion every scene has to carry." },
+  { n: "02", title: "Assemble", desc: "The first cut: structure, rhythm and the spine of the story." },
+  { n: "03", title: "Refine", desc: "Sound-led passes, transitions, color, and effects integration." },
+  { n: "04", title: "Deliver", desc: "Final export, versions, and platform-ready masters." },
+];
+
+function Home() {
+  const [active, setActive] = useState<VideoProject | null>(null);
+  const poster = posterFor(showreel);
+
   return (
-    <main className="relative min-h-screen overflow-hidden bg-[#05070d] text-white">
-      {/* Ambient background */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0"
-        style={{
-          background:
-            "radial-gradient(ellipse 60% 50% at 20% 15%, rgba(106,168,255,0.18), transparent 60%), radial-gradient(ellipse 50% 40% at 85% 85%, rgba(180,123,255,0.16), transparent 60%), radial-gradient(ellipse 80% 60% at 50% 100%, rgba(10,20,50,0.7), transparent 70%)",
-        }}
-      />
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0 opacity-[0.05]"
-        style={{
-          backgroundImage:
-            "linear-gradient(rgba(255,255,255,0.7) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.7) 1px, transparent 1px)",
-          backgroundSize: "56px 56px",
-        }}
-      />
+    <div>
+      <VideoLightbox project={active} onClose={() => setActive(null)} />
 
-      {/* 3D scene */}
-      <Scene3DLayer />
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0"
-        style={{
-          background:
-            "radial-gradient(ellipse 70% 60% at 30% 45%, rgba(5,7,13,0.82), rgba(5,7,13,0.35) 55%, transparent 75%)",
-        }}
-      />
-
-
-
-      <div className="relative z-10 mx-auto flex min-h-screen max-w-7xl flex-col px-6 py-8">
-        {/* Top bar */}
-        <header className="flex items-center justify-between">
-          <Link to="/" className="flex items-center gap-2">
-            <span className="relative inline-flex h-8 w-8 items-center justify-center rounded-md bg-gradient-to-br from-[var(--brand)] to-[var(--brand-violet)] shadow-[0_0_28px_-4px_var(--brand)]">
-              <span className="font-mono text-[11px] font-bold text-white">AI</span>
-            </span>
-            <span className="font-semibold tracking-tight">
-              <span className="text-white">Architect</span>
-              <span className="text-white/50">.systems</span>
-            </span>
-          </Link>
-          <Link
-            to="/home"
-            className="group inline-flex items-center gap-1.5 rounded-full border border-white/15 bg-white/[0.03] px-4 py-2 text-xs font-medium tracking-wide text-white/80 transition hover:border-white/40 hover:bg-white/[0.06] hover:text-white"
-          >
-            Enter site
-            <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
-          </Link>
-        </header>
-
-        {/* Hero + Chat */}
-        <section className="grid flex-1 grid-cols-1 items-center gap-12 py-12 lg:grid-cols-[1.05fr_1fr] lg:gap-16 lg:py-20">
-          {/* Left — pitch */}
-          <div className="flex flex-col">
-            <span className="inline-flex w-fit items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-3 py-1 text-[10px] uppercase tracking-[0.28em] text-white/60">
-              <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 shadow-[0_0_10px_rgba(52,211,153,0.9)]" />
-              Available for Q3 2026
-            </span>
-
-            <Headline3D />
-
-
-            <p className="mt-6 max-w-xl text-lg leading-relaxed text-white/70">
-              A senior AI Architect for LLM, RAG, and multi-agent systems that survive production.
-              Ask the on-site assistant about services and case studies — or step inside.
-            </p>
-
-            <div className="mt-8 flex flex-wrap items-center gap-3">
-              <Link
-                to="/home"
-                className="group inline-flex items-center gap-2 rounded-lg bg-gradient-to-r from-[var(--brand)] to-[var(--brand-violet)] px-5 py-3 text-sm font-medium text-white shadow-[0_10px_40px_-10px_rgba(106,168,255,0.7)] transition hover:opacity-95"
-              >
-                Enter the full site
-                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
-              </Link>
-              <Link
-                to="/portfolio"
-                className="inline-flex items-center gap-2 rounded-lg border border-white/15 px-5 py-3 text-sm font-medium text-white/80 transition hover:border-white/40 hover:text-white"
-              >
-                View case studies
-              </Link>
+      {/* HERO */}
+      <section className="relative overflow-hidden">
+        {poster ? (
+          <img
+            src={poster}
+            alt=""
+            aria-hidden
+            className="absolute inset-0 h-full w-full scale-105 object-cover opacity-35"
+          />
+        ) : null}
+        <div className="absolute inset-0 bg-gradient-to-t from-background via-background/75 to-background/40" />
+        <div className="relative mx-auto max-w-7xl px-6 pb-20 pt-24 md:pb-28 md:pt-36">
+          <span className="chip">Video Editor · Post-Production</span>
+          <h1 className="mt-6 max-w-3xl font-serif text-5xl leading-[1.02] tracking-tight md:text-7xl">
+            Every frame has a <span className="text-gradient-brand italic">purpose.</span>
+          </h1>
+          <p className="mt-6 max-w-xl text-base leading-relaxed text-muted-foreground md:text-lg">
+            Cinematic editing, motion graphics, visual effects and design — cut with rhythm,
+            graded with restraint, and built on real work you can watch right here.
+          </p>
+          <div className="mt-8 flex flex-wrap gap-3">
+            <button
+              type="button"
+              onClick={() => setActive(showreel)}
+              className="btn-primary inline-flex items-center gap-2 rounded-md px-5 py-3 text-sm font-medium"
+            >
+              <Play size={16} /> Watch the showreel
+            </button>
+            <Link
+              to="/work"
+              className="btn-ghost inline-flex items-center gap-2 rounded-md px-5 py-3 text-sm font-medium"
+            >
+              View selected work <ArrowRight size={16} />
+            </Link>
+          </div>
+          <dl className="mt-12 grid max-w-lg grid-cols-3 gap-6 border-t border-border pt-6">
+            <div>
+              <dt className="font-serif text-2xl md:text-3xl">{videoProjects.length}</dt>
+              <dd className="mt-1 text-[11px] uppercase tracking-wider text-muted-foreground">
+                Pieces of work
+              </dd>
             </div>
+            <div>
+              <dt className="font-serif text-2xl md:text-3xl">5</dt>
+              <dd className="mt-1 text-[11px] uppercase tracking-wider text-muted-foreground">
+                Disciplines
+              </dd>
+            </div>
+            <div>
+              <dt className="font-serif text-2xl md:text-3xl">1</dt>
+              <dd className="mt-1 text-[11px] uppercase tracking-wider text-muted-foreground">
+                Rule — purpose
+              </dd>
+            </div>
+          </dl>
+        </div>
+      </section>
 
-            <dl className="mt-12 grid max-w-md grid-cols-3 gap-6 border-t border-white/10 pt-6">
-              {[
-                { k: "8+", v: "yrs shipping AI" },
-                { k: "LLM · RAG", v: "· Agents" },
-                { k: "AWS", v: "production" },
-              ].map((s) => (
-                <div key={s.v}>
-                  <dt className="font-serif text-2xl text-white">{s.k}</dt>
-                  <dd className="mt-1 text-[11px] uppercase tracking-wider text-white/45">{s.v}</dd>
-                </div>
-              ))}
-            </dl>
+      {/* SELECTED WORK */}
+      <section className="mx-auto max-w-7xl px-6 py-16">
+        <div className="mb-10 flex flex-wrap items-end justify-between gap-4">
+          <div>
+            <span className="chip">Selected Work</span>
+            <h2 className="mt-4 text-3xl font-semibold tracking-tight md:text-4xl">
+              Cuts that carry the story
+            </h2>
           </div>
+          <Link
+            to="/work"
+            className="inline-flex items-center gap-1.5 text-sm text-[color:var(--brand)]"
+          >
+            All work <ArrowRight size={14} />
+          </Link>
+        </div>
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          {featuredProjects.slice(0, 6).map((p) => (
+            <VideoCard key={p.title} project={p} onOpen={setActive} />
+          ))}
+        </div>
+      </section>
 
-          {/* Right — Chat */}
-          <div className="flex justify-center lg:justify-end">
-            <LandingChat />
+      {/* SHOWREEL */}
+      <section className="mx-auto max-w-7xl px-6 py-16">
+        <div className="mb-8">
+          <span className="chip">Showreel</span>
+          <h2 className="mt-4 text-3xl font-semibold tracking-tight md:text-4xl">
+            The reel, start to finish
+          </h2>
+        </div>
+        <VideoCard project={showreel} onOpen={setActive} size="large" />
+      </section>
+
+      {/* ABOUT / PHILOSOPHY */}
+      <section className="mx-auto max-w-7xl px-6 py-16">
+        <div className="card-glow grid gap-10 rounded-2xl p-8 md:grid-cols-[1.2fr_1fr] md:p-12">
+          <div>
+            <span className="chip">About & Philosophy</span>
+            <h2 className="mt-4 font-serif text-3xl leading-tight tracking-tight md:text-4xl">
+              Editing is decision-making. Every cut earns its place.
+            </h2>
+            <p className="mt-5 max-w-xl text-base leading-relaxed text-muted-foreground">
+              I edit for presence: long-held framing instead of frantic cuts, sound that leads
+              the picture, effects that never announce themselves. Rhythm, restraint and
+              resolve — whether it's a cinematic dialogue piece, a motion design system, or a
+              scene study from the daily series.
+            </p>
+            <p className="mt-4 max-w-xl text-sm leading-relaxed text-muted-foreground">
+              Everything on this site is real work from my channel — no stock, no placeholders.
+            </p>
           </div>
-        </section>
+          <div className="flex flex-col justify-center gap-4">
+            <a
+              href={YOUTUBE_CHANNEL_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn-ghost inline-flex items-center justify-between gap-2 rounded-lg px-5 py-4 text-sm font-medium"
+            >
+              <span className="inline-flex items-center gap-2">
+                <Youtube size={18} /> Watch on YouTube
+              </span>
+              <ArrowUpRight size={16} className="text-muted-foreground" />
+            </a>
+            <Link
+              to="/work"
+              className="btn-ghost inline-flex items-center justify-between gap-2 rounded-lg px-5 py-4 text-sm font-medium"
+            >
+              <span>Browse all work</span>
+              <ArrowUpRight size={16} className="text-muted-foreground" />
+            </Link>
+          </div>
+        </div>
+      </section>
 
-        {/* Footer hint */}
-        <footer className="flex flex-col items-center gap-2 pb-4 pt-8 text-center text-[11px] uppercase tracking-[0.3em] text-white/35">
-          <span>Scroll or press "Enter site" to explore</span>
-        </footer>
-      </div>
-    </main>
+      {/* SERVICES */}
+      <section className="mx-auto max-w-7xl px-6 py-16">
+        <div className="mb-10">
+          <span className="chip">Services</span>
+          <h2 className="mt-4 text-3xl font-semibold tracking-tight md:text-4xl">
+            What I do, end to end
+          </h2>
+        </div>
+        <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-4">
+          {services.map((s) => (
+            <div key={s.title} className="card-glow rounded-xl p-6">
+              <h3 className="font-serif text-xl leading-snug">{s.title}</h3>
+              <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{s.desc}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* PROCESS */}
+      <section className="mx-auto max-w-7xl px-6 py-16">
+        <div className="mb-10">
+          <span className="chip">Process</span>
+          <h2 className="mt-4 text-3xl font-semibold tracking-tight md:text-4xl">
+            From brief to final master
+          </h2>
+        </div>
+        <div className="grid gap-px overflow-hidden rounded-2xl bg-border md:grid-cols-2 lg:grid-cols-4">
+          {processSteps.map((s) => (
+            <div key={s.n} className="bg-[var(--surface)] p-7">
+              <div className="flex items-center gap-3">
+                <span className="font-mono text-sm text-[color:var(--brand)]">{s.n}</span>
+                <div className="h-px flex-1 bg-border" />
+              </div>
+              <h3 className="mt-4 text-lg font-semibold">{s.title}</h3>
+              <p className="mt-2 text-sm text-muted-foreground">{s.desc}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* CONTACT CTA */}
+      <section className="mx-auto max-w-7xl px-6 py-16">
+        <div className="card-glow relative overflow-hidden rounded-3xl p-10 md:p-16">
+          <div className="pointer-events-none absolute -inset-32 bg-gradient-to-tr from-[var(--brand)]/20 to-[var(--brand-violet)]/20 blur-3xl" />
+          <div className="relative">
+            <h2 className="max-w-2xl font-serif text-3xl leading-tight tracking-tight md:text-5xl">
+              Have footage that deserves a better edit?
+            </h2>
+            <p className="mt-4 max-w-xl text-muted-foreground">
+              Tell me about the project — the material, the deadline, and the feeling it should
+              leave behind. I'll take it from there.
+            </p>
+            <div className="mt-8 flex flex-wrap gap-3">
+              <Link
+                to="/contact"
+                className="btn-primary inline-flex items-center gap-2 rounded-md px-5 py-3 text-sm font-medium"
+              >
+                Start a project <ArrowRight size={16} />
+              </Link>
+              <a
+                href={YOUTUBE_CHANNEL_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn-ghost inline-flex items-center gap-2 rounded-md px-5 py-3 text-sm font-medium"
+              >
+                <Youtube size={16} /> See the channel
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
   );
 }

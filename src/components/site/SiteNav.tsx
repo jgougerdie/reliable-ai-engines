@@ -3,13 +3,9 @@ import { useState } from "react";
 import { Menu, X } from "lucide-react";
 
 const links = [
-  { to: "/home", label: "Home" },
-  { to: "/services", label: "Services" },
-  { to: "/portfolio", label: "Portfolio" },
-  { to: "/blog", label: "Blog" },
-  { to: "/about", label: "About" },
+  { to: "/", label: "Home" },
+  { to: "/work", label: "Work" },
   { to: "/story", label: "Story" },
-  { to: "/videos", label: "Videos" },
   { to: "/contact", label: "Contact" },
 ];
 
@@ -18,13 +14,17 @@ export function SiteNav() {
   return (
     <header className="sticky top-0 z-50 glass">
       <div className="mx-auto max-w-7xl px-6 h-16 flex items-center justify-between">
-        <Link to="/" className="flex items-center gap-2 group">
-          <span className="relative inline-flex h-7 w-7 items-center justify-center rounded-md bg-gradient-to-br from-[var(--brand)] to-[var(--brand-violet)] shadow-[0_0_20px_-4px_var(--brand)]">
-            <span className="font-mono text-[11px] font-bold text-white">AI</span>
+        <Link to="/" className="flex items-center gap-3 group">
+          <span className="relative inline-flex h-9 w-9 items-center justify-center rounded-full border border-border bg-[var(--surface-elevated)] shadow-[0_0_24px_-8px_var(--brand)]">
+            <span className="font-serif text-sm font-semibold tracking-tight text-foreground">JG</span>
           </span>
-          <span className="font-semibold tracking-tight">
-            <span className="text-foreground">Architect</span>
-            <span className="text-muted-foreground">.systems</span>
+          <span className="leading-tight">
+            <span className="block text-sm font-semibold tracking-tight text-foreground">
+              Javad Gougerdie
+            </span>
+            <span className="block text-[10px] uppercase tracking-[0.22em] text-muted-foreground">
+              Video Editor · Post-Production
+            </span>
           </span>
         </Link>
         <nav className="hidden md:flex items-center gap-1">
@@ -43,7 +43,7 @@ export function SiteNav() {
             to="/contact"
             className="ml-2 inline-flex items-center rounded-md px-4 py-2 text-sm font-medium btn-primary"
           >
-            Book Consultation
+            Start a project
           </Link>
         </nav>
         <button
@@ -69,6 +69,13 @@ export function SiteNav() {
                 {l.label}
               </Link>
             ))}
+            <Link
+              to="/contact"
+              onClick={() => setOpen(false)}
+              className="btn-primary mt-2 inline-flex items-center justify-center rounded-md px-4 py-2 text-sm font-medium"
+            >
+              Start a project
+            </Link>
           </div>
         </div>
       )}
