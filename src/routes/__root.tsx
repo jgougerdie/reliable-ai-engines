@@ -6,6 +6,7 @@ import {
   useRouter,
   HeadContent,
   Scripts,
+  type ErrorComponentProps,
 } from "@tanstack/react-router";
 import { useEffect, type ReactNode } from "react";
 
@@ -33,7 +34,7 @@ function NotFoundComponent() {
   );
 }
 
-function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
+function ErrorComponent({ error, reset }: ErrorComponentProps) {
   console.error(error);
   const router = useRouter();
   useEffect(() => {
@@ -67,24 +68,22 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "AI Architect — Production-Grade LLM, RAG & Agent Systems" },
+      { title: "Javad Gougerdie — Video Editor & Post-Production" },
       {
         name: "description",
         content:
-          "AI Architect specializing in production-grade LLM systems, RAG pipelines, AI agents, and workflow automation. 14+ years in software and AI architecture.",
+          "Portfolio of Javad Gougerdie: cinematic editing, motion graphics, visual effects and design. Every frame has a purpose.",
       },
-      { name: "author", content: "AI Architect" },
-      { property: "og:title", content: "AI Architect — Production-Grade LLM, RAG & Agent Systems" },
+      { name: "author", content: "Javad Gougerdie" },
+      { property: "og:title", content: "Javad Gougerdie — Video Editor & Post-Production" },
       {
         property: "og:description",
-        content: "Designing reliable AI systems using LLMs, RAG, agents, and scalable infrastructure.",
+        content: "Cinematic editing, motion graphics, VFX and design — real work, watchable in full.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:title", content: "AI Architect — Production-Grade LLM, RAG & Agent Systems" },
-      { name: "twitter:description", content: "Designing reliable AI systems using LLMs, RAG, agents, and scalable infrastructure." },
-      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/9bcda996-9f26-4a0b-bd3c-14be96828650/id-preview-61768e3c--bbf7eee5-b3b1-44de-9d5c-639ced578f2a.lovable.app-1780130236354.png" },
-      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/9bcda996-9f26-4a0b-bd3c-14be96828650/id-preview-61768e3c--bbf7eee5-b3b1-44de-9d5c-639ced578f2a.lovable.app-1780130236354.png" },
+      { name: "twitter:title", content: "Javad Gougerdie — Video Editor & Post-Production" },
+      { name: "twitter:description", content: "Cinematic editing, motion graphics, VFX and design — real work, watchable in full." },
     ],
     links: [
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -100,12 +99,12 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         type: "application/ld+json",
         children: JSON.stringify({
           "@context": "https://schema.org",
-          "@type": "Organization",
-          name: "Architect.systems",
+"@type": "Organization",
+          name: "Javad Gougerdie — Video Editor & Post-Production",
           url: SITE_URL,
           description:
-            "AI architecture consultancy for production-grade LLM systems, RAG pipelines, AI agents, and workflow automation.",
-          sameAs: ["https://github.com/", "https://linkedin.com/", "https://upwork.com/"],
+            "Portfolio of Javad Gougerdie: cinematic editing, motion graphics, visual effects and design.",
+          sameAs: ["https://www.youtube.com/@JavadGougerdie"],
         }),
       },
       {
@@ -113,10 +112,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         children: JSON.stringify({
           "@context": "https://schema.org",
           "@type": "WebSite",
-          name: "Architect.systems",
+          name: "Javad Gougerdie — Video Editor & Post-Production",
           url: SITE_URL,
           description:
-            "Field notes, case studies, and consulting on production-grade LLM, RAG, and agent systems.",
+            "Selected video editing, motion graphics, visual effects and design work — every frame has a purpose.",
         }),
       },
     ],

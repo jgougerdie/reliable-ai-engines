@@ -9,76 +9,33 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as VideosRouteImport } from './routes/videos'
-import { Route as StoryRouteImport } from './routes/story'
-import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
-import { Route as ServicesRouteImport } from './routes/services'
-import { Route as PortfolioRouteImport } from './routes/portfolio'
-import { Route as McpRouteImport } from './routes/mcp'
-import { Route as HomeRouteImport } from './routes/home'
-import { Route as ContactRouteImport } from './routes/contact'
-import { Route as BlogRouteImport } from './routes/blog'
-import { Route as AuthRouteImport } from './routes/auth'
-import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as PortfolioSlugRouteImport } from './routes/portfolio.$slug'
-import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
-import { Route as ApiChatRouteImport } from './routes/api/chat'
-import { Route as Char91DotwellKnownChar93OauthProtectedResourceRouteImport } from './routes/[.well-known]/oauth-protected-resource'
+import { Route as AboutRouteImport } from './routes/about'
+import { Route as AiRouteImport } from './routes/ai'
+import { Route as AuthRouteImport } from './routes/auth'
+import { Route as BlogRouteImport } from './routes/blog'
+import { Route as ContactRouteImport } from './routes/contact'
+import { Route as HomeRouteImport } from './routes/home'
+import { Route as McpRouteImport } from './routes/mcp'
+import { Route as PortfolioRouteImport } from './routes/portfolio'
+import { Route as ServicesRouteImport } from './routes/services'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as StoryRouteImport } from './routes/story'
+import { Route as VideosRouteImport } from './routes/videos'
+import { Route as WorkRouteImport } from './routes/work'
 import { Route as Char91DotmcpChar93ListToolsRouteImport } from './routes/[.mcp]/list-tools'
-import { Route as ApiPublicVideosRouteImport } from './routes/api/public/videos'
-import { Route as Char91DotmcpChar93InvokeToolToolRouteImport } from './routes/[.mcp]/invoke-tool/$tool'
+import { Route as Char91DotwellKnownChar93OauthProtectedResourceRouteImport } from './routes/[.well-known]/oauth-protected-resource'
+import { Route as ApiChatRouteImport } from './routes/api/chat'
+import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
+import { Route as PortfolioSlugRouteImport } from './routes/portfolio.$slug'
 import { Route as DotlovableOauthConsentRouteImport } from './routes/[.]lovable.oauth.consent'
+import { Route as Char91DotmcpChar93InvokeToolToolRouteImport } from './routes/[.mcp]/invoke-tool/$tool'
+import { Route as ApiPublicVideosRouteImport } from './routes/api/public/videos'
 import { Route as ApiPublicVideosIdRouteImport } from './routes/api/public/videos.$id'
 
-const VideosRoute = VideosRouteImport.update({
-  id: '/videos',
-  path: '/videos',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const StoryRoute = StoryRouteImport.update({
-  id: '/story',
-  path: '/story',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
-  id: '/sitemap.xml',
-  path: '/sitemap.xml',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ServicesRoute = ServicesRouteImport.update({
-  id: '/services',
-  path: '/services',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PortfolioRoute = PortfolioRouteImport.update({
-  id: '/portfolio',
-  path: '/portfolio',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const McpRoute = McpRouteImport.update({
-  id: '/mcp',
-  path: '/mcp',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const HomeRoute = HomeRouteImport.update({
-  id: '/home',
-  path: '/home',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ContactRoute = ContactRouteImport.update({
-  id: '/contact',
-  path: '/contact',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const BlogRoute = BlogRouteImport.update({
-  id: '/blog',
-  path: '/blog',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AuthRoute = AuthRouteImport.update({
-  id: '/auth',
-  path: '/auth',
+const IndexRoute = IndexRouteImport.update({
+  id: '/',
+  path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AboutRoute = AboutRouteImport.update({
@@ -86,41 +43,96 @@ const AboutRoute = AboutRouteImport.update({
   path: '/about',
   getParentRoute: () => rootRouteImport,
 } as any)
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
+const AiRoute = AiRouteImport.update({
+  id: '/ai',
+  path: '/ai',
   getParentRoute: () => rootRouteImport,
 } as any)
-const PortfolioSlugRoute = PortfolioSlugRouteImport.update({
-  id: '/$slug',
-  path: '/$slug',
-  getParentRoute: () => PortfolioRoute,
-} as any)
-const BlogSlugRoute = BlogSlugRouteImport.update({
-  id: '/$slug',
-  path: '/$slug',
-  getParentRoute: () => BlogRoute,
-} as any)
-const ApiChatRoute = ApiChatRouteImport.update({
-  id: '/api/chat',
-  path: '/api/chat',
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
   getParentRoute: () => rootRouteImport,
 } as any)
-const Char91DotwellKnownChar93OauthProtectedResourceRoute =
-  Char91DotwellKnownChar93OauthProtectedResourceRouteImport.update({
-    id: '/.well-known/oauth-protected-resource',
-    path: '/.well-known/oauth-protected-resource',
-    getParentRoute: () => rootRouteImport,
-  } as any)
+const BlogRoute = BlogRouteImport.update({
+  id: '/blog',
+  path: '/blog',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContactRoute = ContactRouteImport.update({
+  id: '/contact',
+  path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HomeRoute = HomeRouteImport.update({
+  id: '/home',
+  path: '/home',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const McpRoute = McpRouteImport.update({
+  id: '/mcp',
+  path: '/mcp',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PortfolioRoute = PortfolioRouteImport.update({
+  id: '/portfolio',
+  path: '/portfolio',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ServicesRoute = ServicesRouteImport.update({
+  id: '/services',
+  path: '/services',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const StoryRoute = StoryRouteImport.update({
+  id: '/story',
+  path: '/story',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const VideosRoute = VideosRouteImport.update({
+  id: '/videos',
+  path: '/videos',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const WorkRoute = WorkRouteImport.update({
+  id: '/work',
+  path: '/work',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const Char91DotmcpChar93ListToolsRoute =
   Char91DotmcpChar93ListToolsRouteImport.update({
     id: '/.mcp/list-tools',
     path: '/.mcp/list-tools',
     getParentRoute: () => rootRouteImport,
   } as any)
-const ApiPublicVideosRoute = ApiPublicVideosRouteImport.update({
-  id: '/api/public/videos',
-  path: '/api/public/videos',
+const Char91DotwellKnownChar93OauthProtectedResourceRoute =
+  Char91DotwellKnownChar93OauthProtectedResourceRouteImport.update({
+    id: '/.well-known/oauth-protected-resource',
+    path: '/.well-known/oauth-protected-resource',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiChatRoute = ApiChatRouteImport.update({
+  id: '/api/chat',
+  path: '/api/chat',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BlogSlugRoute = BlogSlugRouteImport.update({
+  id: '/$slug',
+  path: '/$slug',
+  getParentRoute: () => BlogRoute,
+} as any)
+const PortfolioSlugRoute = PortfolioSlugRouteImport.update({
+  id: '/$slug',
+  path: '/$slug',
+  getParentRoute: () => PortfolioRoute,
+} as any)
+const DotlovableOauthConsentRoute = DotlovableOauthConsentRouteImport.update({
+  id: '/.lovable/oauth/consent',
+  path: '/.lovable/oauth/consent',
   getParentRoute: () => rootRouteImport,
 } as any)
 const Char91DotmcpChar93InvokeToolToolRoute =
@@ -129,9 +141,9 @@ const Char91DotmcpChar93InvokeToolToolRoute =
     path: '/.mcp/invoke-tool/$tool',
     getParentRoute: () => rootRouteImport,
   } as any)
-const DotlovableOauthConsentRoute = DotlovableOauthConsentRouteImport.update({
-  id: '/.lovable/oauth/consent',
-  path: '/.lovable/oauth/consent',
+const ApiPublicVideosRoute = ApiPublicVideosRouteImport.update({
+  id: '/api/public/videos',
+  path: '/api/public/videos',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiPublicVideosIdRoute = ApiPublicVideosIdRouteImport.update({
@@ -143,6 +155,7 @@ const ApiPublicVideosIdRoute = ApiPublicVideosIdRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/ai': typeof AiRoute
   '/auth': typeof AuthRoute
   '/blog': typeof BlogRouteWithChildren
   '/contact': typeof ContactRoute
@@ -153,6 +166,7 @@ export interface FileRoutesByFullPath {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/story': typeof StoryRoute
   '/videos': typeof VideosRoute
+  '/work': typeof WorkRoute
   '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/api/chat': typeof ApiChatRoute
@@ -166,6 +180,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/ai': typeof AiRoute
   '/auth': typeof AuthRoute
   '/blog': typeof BlogRouteWithChildren
   '/contact': typeof ContactRoute
@@ -176,6 +191,7 @@ export interface FileRoutesByTo {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/story': typeof StoryRoute
   '/videos': typeof VideosRoute
+  '/work': typeof WorkRoute
   '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/api/chat': typeof ApiChatRoute
@@ -190,6 +206,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/ai': typeof AiRoute
   '/auth': typeof AuthRoute
   '/blog': typeof BlogRouteWithChildren
   '/contact': typeof ContactRoute
@@ -200,6 +217,7 @@ export interface FileRoutesById {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/story': typeof StoryRoute
   '/videos': typeof VideosRoute
+  '/work': typeof WorkRoute
   '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/api/chat': typeof ApiChatRoute
@@ -215,6 +233,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/about'
+    | '/ai'
     | '/auth'
     | '/blog'
     | '/contact'
@@ -225,6 +244,7 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/story'
     | '/videos'
+    | '/work'
     | '/.mcp/list-tools'
     | '/.well-known/oauth-protected-resource'
     | '/api/chat'
@@ -238,6 +258,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/about'
+    | '/ai'
     | '/auth'
     | '/blog'
     | '/contact'
@@ -248,6 +269,7 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/story'
     | '/videos'
+    | '/work'
     | '/.mcp/list-tools'
     | '/.well-known/oauth-protected-resource'
     | '/api/chat'
@@ -261,6 +283,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/about'
+    | '/ai'
     | '/auth'
     | '/blog'
     | '/contact'
@@ -271,6 +294,7 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/story'
     | '/videos'
+    | '/work'
     | '/.mcp/list-tools'
     | '/.well-known/oauth-protected-resource'
     | '/api/chat'
@@ -285,6 +309,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
+  AiRoute: typeof AiRoute
   AuthRoute: typeof AuthRoute
   BlogRoute: typeof BlogRouteWithChildren
   ContactRoute: typeof ContactRoute
@@ -295,6 +320,7 @@ export interface RootRouteChildren {
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   StoryRoute: typeof StoryRoute
   VideosRoute: typeof VideosRoute
+  WorkRoute: typeof WorkRoute
   Char91DotmcpChar93ListToolsRoute: typeof Char91DotmcpChar93ListToolsRoute
   Char91DotwellKnownChar93OauthProtectedResourceRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   ApiChatRoute: typeof ApiChatRoute
@@ -305,74 +331,11 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/videos': {
-      id: '/videos'
-      path: '/videos'
-      fullPath: '/videos'
-      preLoaderRoute: typeof VideosRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/story': {
-      id: '/story'
-      path: '/story'
-      fullPath: '/story'
-      preLoaderRoute: typeof StoryRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/sitemap.xml': {
-      id: '/sitemap.xml'
-      path: '/sitemap.xml'
-      fullPath: '/sitemap.xml'
-      preLoaderRoute: typeof SitemapDotxmlRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/services': {
-      id: '/services'
-      path: '/services'
-      fullPath: '/services'
-      preLoaderRoute: typeof ServicesRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/portfolio': {
-      id: '/portfolio'
-      path: '/portfolio'
-      fullPath: '/portfolio'
-      preLoaderRoute: typeof PortfolioRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/mcp': {
-      id: '/mcp'
-      path: '/mcp'
-      fullPath: '/mcp'
-      preLoaderRoute: typeof McpRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/home': {
-      id: '/home'
-      path: '/home'
-      fullPath: '/home'
-      preLoaderRoute: typeof HomeRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/contact': {
-      id: '/contact'
-      path: '/contact'
-      fullPath: '/contact'
-      preLoaderRoute: typeof ContactRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/blog': {
-      id: '/blog'
-      path: '/blog'
-      fullPath: '/blog'
-      preLoaderRoute: typeof BlogRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/auth': {
-      id: '/auth'
-      path: '/auth'
-      fullPath: '/auth'
-      preLoaderRoute: typeof AuthRouteImport
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/about': {
@@ -382,39 +345,88 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AboutRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
+    '/ai': {
+      id: '/ai'
+      path: '/ai'
+      fullPath: '/ai'
+      preLoaderRoute: typeof AiRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/portfolio/$slug': {
-      id: '/portfolio/$slug'
-      path: '/$slug'
-      fullPath: '/portfolio/$slug'
-      preLoaderRoute: typeof PortfolioSlugRouteImport
-      parentRoute: typeof PortfolioRoute
-    }
-    '/blog/$slug': {
-      id: '/blog/$slug'
-      path: '/$slug'
-      fullPath: '/blog/$slug'
-      preLoaderRoute: typeof BlogSlugRouteImport
-      parentRoute: typeof BlogRoute
-    }
-    '/api/chat': {
-      id: '/api/chat'
-      path: '/api/chat'
-      fullPath: '/api/chat'
-      preLoaderRoute: typeof ApiChatRouteImport
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/.well-known/oauth-protected-resource': {
-      id: '/.well-known/oauth-protected-resource'
-      path: '/.well-known/oauth-protected-resource'
-      fullPath: '/.well-known/oauth-protected-resource'
-      preLoaderRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRouteImport
+    '/blog': {
+      id: '/blog'
+      path: '/blog'
+      fullPath: '/blog'
+      preLoaderRoute: typeof BlogRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contact': {
+      id: '/contact'
+      path: '/contact'
+      fullPath: '/contact'
+      preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/home': {
+      id: '/home'
+      path: '/home'
+      fullPath: '/home'
+      preLoaderRoute: typeof HomeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/mcp': {
+      id: '/mcp'
+      path: '/mcp'
+      fullPath: '/mcp'
+      preLoaderRoute: typeof McpRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/portfolio': {
+      id: '/portfolio'
+      path: '/portfolio'
+      fullPath: '/portfolio'
+      preLoaderRoute: typeof PortfolioRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/services': {
+      id: '/services'
+      path: '/services'
+      fullPath: '/services'
+      preLoaderRoute: typeof ServicesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/story': {
+      id: '/story'
+      path: '/story'
+      fullPath: '/story'
+      preLoaderRoute: typeof StoryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/videos': {
+      id: '/videos'
+      path: '/videos'
+      fullPath: '/videos'
+      preLoaderRoute: typeof VideosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/work': {
+      id: '/work'
+      path: '/work'
+      fullPath: '/work'
+      preLoaderRoute: typeof WorkRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/.mcp/list-tools': {
@@ -424,11 +436,39 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof Char91DotmcpChar93ListToolsRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/public/videos': {
-      id: '/api/public/videos'
-      path: '/api/public/videos'
-      fullPath: '/api/public/videos'
-      preLoaderRoute: typeof ApiPublicVideosRouteImport
+    '/.well-known/oauth-protected-resource': {
+      id: '/.well-known/oauth-protected-resource'
+      path: '/.well-known/oauth-protected-resource'
+      fullPath: '/.well-known/oauth-protected-resource'
+      preLoaderRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/chat': {
+      id: '/api/chat'
+      path: '/api/chat'
+      fullPath: '/api/chat'
+      preLoaderRoute: typeof ApiChatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/blog/$slug': {
+      id: '/blog/$slug'
+      path: '/$slug'
+      fullPath: '/blog/$slug'
+      preLoaderRoute: typeof BlogSlugRouteImport
+      parentRoute: typeof BlogRoute
+    }
+    '/portfolio/$slug': {
+      id: '/portfolio/$slug'
+      path: '/$slug'
+      fullPath: '/portfolio/$slug'
+      preLoaderRoute: typeof PortfolioSlugRouteImport
+      parentRoute: typeof PortfolioRoute
+    }
+    '/.lovable/oauth/consent': {
+      id: '/.lovable/oauth/consent'
+      path: '/.lovable/oauth/consent'
+      fullPath: '/.lovable/oauth/consent'
+      preLoaderRoute: typeof DotlovableOauthConsentRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/.mcp/invoke-tool/$tool': {
@@ -438,11 +478,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof Char91DotmcpChar93InvokeToolToolRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/.lovable/oauth/consent': {
-      id: '/.lovable/oauth/consent'
-      path: '/.lovable/oauth/consent'
-      fullPath: '/.lovable/oauth/consent'
-      preLoaderRoute: typeof DotlovableOauthConsentRouteImport
+    '/api/public/videos': {
+      id: '/api/public/videos'
+      path: '/api/public/videos'
+      fullPath: '/api/public/videos'
+      preLoaderRoute: typeof ApiPublicVideosRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/public/videos/$id': {
@@ -492,6 +532,7 @@ const ApiPublicVideosRouteWithChildren = ApiPublicVideosRoute._addFileChildren(
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
+  AiRoute: AiRoute,
   AuthRoute: AuthRoute,
   BlogRoute: BlogRouteWithChildren,
   ContactRoute: ContactRoute,
@@ -502,6 +543,7 @@ const rootRouteChildren: RootRouteChildren = {
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   StoryRoute: StoryRoute,
   VideosRoute: VideosRoute,
+  WorkRoute: WorkRoute,
   Char91DotmcpChar93ListToolsRoute: Char91DotmcpChar93ListToolsRoute,
   Char91DotwellKnownChar93OauthProtectedResourceRoute:
     Char91DotwellKnownChar93OauthProtectedResourceRoute,
