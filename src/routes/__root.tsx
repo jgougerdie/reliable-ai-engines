@@ -98,12 +98,12 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         type: "application/ld+json",
         children: JSON.stringify({
           "@context": "https://schema.org",
-          "@type": "Organization",
-          name: "Architect.systems",
+"@type": "Organization",
+          name: "Javad Gougerdie — Video Editor & Post-Production",
           url: SITE_URL,
           description:
-            "AI architecture consultancy for production-grade LLM systems, RAG pipelines, AI agents, and workflow automation.",
-          sameAs: ["https://github.com/", "https://linkedin.com/", "https://upwork.com/"],
+            "Portfolio of Javad Gougerdie: cinematic editing, motion graphics, visual effects and design.",
+          sameAs: ["https://www.youtube.com/@JavadGougerdie"],
         }),
       },
       {
@@ -111,10 +111,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         children: JSON.stringify({
           "@context": "https://schema.org",
           "@type": "WebSite",
-          name: "Architect.systems",
+          name: "Javad Gougerdie — Video Editor & Post-Production",
           url: SITE_URL,
           description:
-            "Field notes, case studies, and consulting on production-grade LLM, RAG, and agent systems.",
+            "Selected video editing, motion graphics, visual effects and design work — every frame has a purpose.",
         }),
       },
     ],
